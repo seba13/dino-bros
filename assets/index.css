@@ -1,0 +1,24 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    cursor: url('./cursor_64.png'), pointer;
+}
+
+.container 
+{
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    overflow: hidden;
+}
