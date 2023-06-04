@@ -179,20 +179,28 @@ function iniciar() {
         alto: 48,
         pos: [
             {
-                posX: Math.floor(Math.random() * 800 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 420 * Math.floor(Math.random() * 10)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 100),
             },
             {
-                posX: Math.floor(Math.random() * 450 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 720 * Math.floor(Math.random() * 8)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 150),
             },
             {
-                posX: Math.floor(Math.random() * 700 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 120 * Math.floor(Math.random() * 6)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 200),
             },
             {
-                posX: Math.floor(Math.random() * 200 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 680 * Math.floor(Math.random() * 4)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 250),
+            },
+            {
+                posX: Math.floor( Math.random() * 190 * Math.floor(Math.random() * 2)+ window.innerWidth )  ,
+                posY: Math.floor(Math.random() * 230),
+            },
+            {
+                posX: Math.floor( Math.random() * 50 * Math.floor(Math.random() * 10)+ window.innerWidth )  ,
+                posY: Math.floor(Math.random() * 180),
             },
         ]
     }
@@ -205,16 +213,20 @@ function iniciar() {
         alto: 75,
         pos: [
             {
-                posX: Math.floor(Math.random() * 800 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 220 * Math.floor(Math.random() * 2)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 200),
             },
             {
-                posX: Math.floor(Math.random() * 750 + window.innerWidth) ,
+                posX: Math.floor( Math.random() * 330 * Math.floor(Math.random() * 4)+ window.innerWidth )  ,
                 posY: Math.floor(Math.random() * 250),
             },
             {
-                posX: Math.floor(Math.random() * 680 + window.innerWidth) ,
-                posY: Math.floor(Math.random() * 300),
+                posX: Math.floor( Math.random() * 450 * Math.floor(Math.random() * 6)+ window.innerWidth ) ,
+                posY: Math.floor(Math.random() * 250),
+            },
+            {
+                posX: Math.floor( Math.random() * 180 * Math.floor(Math.random() * 8)+ window.innerWidth ) ,
+                posY: Math.floor(Math.random() * 250),
             },
         ]
     }
@@ -253,8 +265,8 @@ function iniciar() {
 
             if(nube.posX + nubePequeña.ancho < 0 ) {
                 
-                nube.posX = Math.floor( Math.random() * 500 * Math.floor(Math.random() * 6) + window.innerWidth )
-                nube.posY = Math.floor( Math.random() * 50 + 10 )
+                nube.posX = Math.floor( Math.random() * 500 * Math.floor(Math.random() * 10) + window.innerWidth )
+                nube.posY = Math.floor( Math.random() * 150 + 10 )
             }
        })
 
@@ -265,8 +277,8 @@ function iniciar() {
             nube.posX -= 1
                 
             if(nube.posX + nubeGrande.ancho < 0 ) {
-                nube.posX = Math.floor( Math.random() * 500 * Math.floor(Math.random() * 6)+ window.innerWidth )
-                nube.posY = Math.floor( Math.random() * 50 + 10 )
+                nube.posX = Math.floor( Math.random() * 500 * Math.floor(Math.random() * 10)+ window.innerWidth )
+                nube.posY = Math.floor( Math.random() * 150 + 10 )
             }
 
        })
@@ -342,8 +354,8 @@ function iniciar() {
 
                 ctx.drawImage(mario.sprite, mario.frameActual * mario.ancho, 0, mario.ancho, mario.alto, mario.posX, mario.y, mario.ancho/3, mario.alto/3);
 
-                if(mario.posX + 7  < window.innerWidth - mario.ancho/3) {
-                    mario.posX += 7
+                if(mario.posX + 15  < window.innerWidth - mario.ancho/3) {
+                    mario.posX += 15
                 }
             }
             else if(marioIzquierda && !marioDerecha) {
@@ -352,8 +364,8 @@ function iniciar() {
 
                 mario.sprite = spriteMarioIzq
 
-                if(mario.posX - 7  > 0) {
-                    mario.posX -= 7
+                if(mario.posX - 15  > 0) {
+                    mario.posX -= 15
                 }
 
             }else {
