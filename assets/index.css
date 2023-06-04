@@ -21,4 +21,6 @@ body {
 
 canvas {
     overflow: hidden;
+    min-width: 800px;
+    min-height: 600px;
 }
