@@ -9,7 +9,7 @@
 body {
     width: 100%;
     min-height: 100vh;
-    cursor: url('./cursor_64.png'), pointer;
+    cursor: url('./img/cursor_64.png'), pointer;
 }
 
 .container 
@@ -21,6 +21,4 @@ body {
 
 canvas {
     overflow: hidden;
-    min-width: 800px;
-    min-height: 600px;
 }
