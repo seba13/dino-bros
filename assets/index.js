@@ -22,16 +22,18 @@ const ctx = canvas.getContext("2d");
 const propGenerales = {
   mario: {
     escalaSprite: 0.3,
+    ancho: 1980,
+    alto: 514,
   },
   fondo: {
     ancho: 1008,
     alto: 480,
-    escalaSprite: canvas.height / 468,
+    escalaSprite: canvas.width / 1008,
   },
   suelo: {
-    alto: 144,
-    ancho: 72,
-    escalaSprite: 2,
+    alto: 118,
+    ancho: 185,
+    escalaSprite: 1,
   },
   cantidadNubes: 9,
   nubePequeña: {
@@ -135,9 +137,9 @@ const fondo = new Sprite({
 const mario = new Sprite({
   posicion: {
     x: canvas.width / 2.5,
-    y:
-      canvas.height -
-      propGenerales.suelo.alto * propGenerales.suelo.escalaSprite,
+    y: canvas.height -
+       propGenerales.suelo.alto -
+       propGenerales.mario.alto * propGenerales.mario.escalaSprite,
   },
   velocidad: {
     x: 0,
@@ -246,21 +248,62 @@ propGenerales.cesped.posicionX.forEach((cesped) => {
   );
 });
 
-const suelo = new Sprite({
-  posicion: {
-    x: 0,
-    y: canvas.height - propGenerales.suelo.alto,
-  },
-  velocidad: {
-    x: 0,
-    y: 0,
-  },
-  rutaImagen: "./assets/img/suelo.png",
-  contadorLimiteCuadros: 1,
-  maximosCuadros: 1,
-  escalaSprite: propGenerales.suelo.escalaSprite,
-  gravedad: 1,
-});
+// const suelo = new Sprite({
+//   posicion: {
+//     x: 0,
+//     y: canvas.height - propGenerales.suelo.alto,
+//   },
+//   velocidad: {
+//     x: 0,
+//     y: 0,
+//   },
+//   rutaImagen: "./assets/img/suelo-1.png",
+//   contadorLimiteCuadros: 1,
+//   maximosCuadros: 1,
+//   escalaSprite:1,
+//   gravedad: 1,
+// });
+
+const suelos = [];
+for (let index = 0; index <= canvas.width / propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite; index++) {
+    suelos.push(
+        new Sprite({
+            posicion: {
+            x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
+            y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite,
+            },
+            velocidad: {
+            x: 0,
+            y: 0,
+            },
+            rutaImagen: "./assets/img/suelo-1.png",
+            contadorLimiteCuadros: 1,
+            maximosCuadros: 1,
+            escalaSprite:propGenerales.suelo.escalaSprite,
+            gravedad: 0,    
+        })
+    )
+    suelos.push(
+        new Sprite({
+            posicion: {
+            x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
+            y: canvas.height  - propGenerales.suelo.alto/2 * propGenerales.suelo.escalaSprite,
+            },
+            velocidad: {
+            x: 0,
+            y: 0,
+            },
+            rutaImagen: "./assets/img/suelo-2.png",
+            contadorLimiteCuadros: 1,
+            maximosCuadros: 1,
+            escalaSprite: propGenerales.suelo.escalaSprite,
+            gravedad: 0,    
+        })
+    )
+}
+
+
+
 
 const cercas = [];
 
@@ -282,7 +325,7 @@ propGenerales.cerca.posicionX.forEach((cerca) => {
         contadorLimiteCuadros: 1,
         maximosCuadros: 1,
         escalaSprite: 1,
-        gravedad: 0,
+        gravedad: 1,
       })
     );
   }
@@ -370,19 +413,14 @@ function iniciar() {
       nubesGrandes[index].actualizarSprite();
     }
 
-    for (
-      let index = 0;
-      index <=
-      (canvas.width / propGenerales.suelo.ancho) *
-        propGenerales.suelo.escalaSprite;
-      index++
-    ) {
-      suelo.posicion.x =
-        index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
-      suelo.actualizarSprite();
-    }
+    // for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
+    //   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
+    //   suelo.actualizarSprite();
+    // }
 
-    suelo.actualizarSprite();
+    suelos.forEach( suelo => suelo.actualizarSprite())
+
+    // suelo.actualizarSprite();
     cespeds.forEach((s) => s.actualizarSprite());
     flores.forEach((flor) => flor.actualizarSprite());
     cercas.forEach((cerca) => cerca.actualizarSprite());
