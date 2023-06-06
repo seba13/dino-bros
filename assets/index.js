@@ -15,14 +15,14 @@
 
 const canvas = document.querySelector('canvas');
 
-canvas.width = 1920;
-canvas.height = 973;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
 const propGenerales = {
 	mario: {
 		escalaSprite: 0.3,
-		ancho: 1980,
+		ancho: 3960,
 		alto: 514,
 	},
 	fondo: {
@@ -104,7 +104,7 @@ const propGenerales = {
 			},
 		],
 	},
-	gravedad: 0.7,
+	gravedad: .8,
 	teclas: {
 		ArrowLeft: {
 			presionada: false,
@@ -131,31 +131,36 @@ const fondo = new Sprite({
 	contadorLimiteCuadros: 1,
 	maximosCuadros: 1,
 	escalaSprite: propGenerales.fondo.escalaSprite,
-	gravedad: 0,
+	gravedad: 1,
 });
 
 const mario = new Sprite({
 	posicion: {
 		x: canvas.width / 2.5,
-		y: canvas.height - propGenerales.suelo.alto - propGenerales.mario.alto * propGenerales.mario.escalaSprite,
+		y: canvas.height - propGenerales.suelo.alto - propGenerales.mario.alto * propGenerales.mario.escalaSprite ,
+		// y: 0,
 	},
 	velocidad: {
 		x: 0,
 		y: 0,
 	},
-	rutaImagen: './assets/img/sprites-mario-inactivo-derecha.png',
-	contadorLimiteCuadros: 7,
-	maximosCuadros: 6,
+	rutaImagen: './assets/img/sprites-mario-inactivo-derecha-2.png',
+	contadorLimiteCuadros: 5,
+	maximosCuadros: 12,
 	escalaSprite: propGenerales.mario.escalaSprite,
 	gravedad: 1,
+    offset : {
+        x: 0,
+        y: 15,
+    },
 	sprites: {
 		inactivoIzquierda: {
-			rutaImagen: './assets/img/sprites-mario-inactivo-izquierda.png',
-			maximosCuadros: '6',
+			rutaImagen: './assets/img/sprites-mario-inactivo-izquierda-2.png',
+			maximosCuadros: '12',
 		},
 		inactivoDerecha: {
-			rutaImagen: './assets/img/sprites-mario-inactivo-derecha.png',
-			maximosCuadros: '6',
+			rutaImagen: './assets/img/sprites-mario-inactivo-derecha-2.png',
+			maximosCuadros: '12',
 		},
 		caminandoIzquierda: {
 			rutaImagen: './assets/img/sprites-mario-caminando-izquierda.png',
@@ -233,7 +238,7 @@ propGenerales.cesped.posicionX.forEach((cesped) => {
 			contadorLimiteCuadros: 1,
 			maximosCuadros: 1,
 			escalaSprite: 1,
-			gravedad: 0,
+			gravedad: 1,
 		}),
 	);
 });
@@ -254,7 +259,7 @@ for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGe
 			contadorLimiteCuadros: 1,
 			maximosCuadros: 1,
 			escalaSprite: propGenerales.suelo.escalaSprite,
-			gravedad: 0,
+			gravedad: 1,
 		}),
 	);
 	suelos.push(
@@ -271,7 +276,7 @@ for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGe
 			contadorLimiteCuadros: 1,
 			maximosCuadros: 1,
 			escalaSprite: propGenerales.suelo.escalaSprite,
-			gravedad: 0,
+			gravedad: 1,
 		}),
 	);
 }
