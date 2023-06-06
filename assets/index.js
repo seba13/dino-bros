@@ -384,12 +384,29 @@ function iniciar() {
 		//   suelo.actualizarSprite();
 		// }
 
-		suelos.forEach((suelo) => suelo.actualizarSprite());
+        console.log({suelo: canvas.height - propGenerales.suelo.alto });
+
+		suelos.forEach((suelo) => {
+            suelo.actualizarSprite()
+            // console.log({suelo: suelo.posicion.y});
+        });
 
 		// suelo.actualizarSprite();
-		cespeds.forEach((s) => s.actualizarSprite());
-		flores.forEach((flor) => flor.actualizarSprite());
-		cercas.forEach((cerca) => cerca.actualizarSprite());
+		cespeds.forEach((s) => {
+            console.log({pasto: s.posicion.y});
+            s.actualizarSprite()
+        });
+        
+
+
+		flores.forEach((flor) => {
+            console.log({flor: flor.posicion.y});
+            flor.actualizarSprite()
+        });
+		cercas.forEach((cerca) => {
+            cerca.actualizarSprite()
+            console.log({cerca:cerca.posicion.y});
+        });
 		mario.actualizarSprite();
 
 		requestAnimationFrame(animar);
