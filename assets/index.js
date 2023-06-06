@@ -439,4 +439,36 @@ function iniciar() {
 			propGenerales.teclas.ArrowUp.presionada = false;
 		}
 	});
+
+	function askPermission() {
+		// feature detect
+		alert
+		if (typeof DeviceOrientationEvent.requestPermission === "function") {
+		  DeviceOrientationEvent.requestPermission()
+			.then(permissionState => {
+			  if (permissionState === "granted") {
+				window.addEventListener('devicemotion', () => {
+
+					let aceleracion = e.acceleration
+			
+					alert('aca')
+					if(aceleracion.x > 0) {
+						alert("derecha");
+					}
+					else if (aceleracion < 0) {
+						alert('izquierda')
+					}
+			
+			
+				})
+			  }
+			})
+			.catch(console.error);
+		} else {
+		  // handle regular non iOS 13+ devices
+		}
+	}
+
+	askPermission()
+	
 }
