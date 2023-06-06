@@ -13,423 +13,446 @@
 // COLISIONES CON ENEMIGOS
 // REINICIAR JUEGO
 
-const canvas = document.querySelector('canvas');
-let ctx;
+const canvas = document.querySelector("canvas");
 
-let propGenerales;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const ctx = canvas.getContext("2d");
 
-let mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
+const propGenerales = {
+  mario: {
+    escalaSprite: 0.3,
+    ancho: 1980,
+    alto: 514,
+  },
+  fondo: {
+    ancho: 1008,
+    alto: 480,
+    escalaSprite: canvas.width / 1008,
+  },
+  suelo: {
+    alto: 118,
+    ancho: 185,
+    escalaSprite: 1,
+  },
+  cantidadNubes: 9,
+  nubePequeña: {
+    ancho: 79,
+    escalaSprite: 1,
+  },
+  nubeGrande: {
+    ancho: 151,
+    escalaSprite: 1,
+  },
+  cesped: {
+    ancho: 120,
+    alto: 24,
+    escalaSprite: 1,
+    y: window.innerHeight - 144,
+    posicionX: [
+      {
+        x: 0,
+      },
+      {
+        x: 500,
+      },
+      {
+        x: 892,
+      },
+      {
+        x: canvas.width - 166 - 120,
+      },
+    ],
+  },
+  flor: {
+    ancho: 260,
+    alto: 468,
+    escalaSprite: 0.22,
+    florRoja: {
+      posicionX: [
+        {
+          x: 227,
+        },
+        {
+          x: canvas.width - 260 * 0.22 - 166,
+        },
+      ],
+    },
+    florAmarilla: {
+      posicionX: [
+        {
+          x: 227 + 260 * 0.22,
+        },
+        {
+          x: canvas.width - 260 * 0.22 - 166 - 260 * 0.22,
+        },
+      ],
+    },
+  },
+  cerca: {
+    ancho: 48,
+    alto: 51,
+    escalaSprite: 1,
+    posicionX: [
+      {
+        x: 172,
+        cantidad: 4,
+      },
+      {
+        x: canvas.width - 343,
+        cantidad: 4,
+      },
+    ],
+  },
+  gravedad: 0.7,
+  teclas: {
+    ArrowLeft: {
+      presionada: false,
+    },
+    ArrowRight: {
+      presionada: false,
+    },
+    ArrowUp: {
+      presionada: false,
+    },
+  },
+};
 
-function instanciarObjetos() {
-	fondo = new Sprite({
-		posicion: {
-			x: 0,
-			y: 0,
-		},
-		velocidad: {
-			x: 0,
-			y: 0,
-		},
-		rutaImagen: './assets/img/fondo.png',
-		contadorLimiteCuadros: 1,
-		maximosCuadros: 1,
-		escalaSprite: propGenerales.fondo.escalaSprite,
-		gravedad: 0,
-	});
-
-	mario = new Sprite({
-		posicion: {
-			x: canvas.width / 2.5,
-			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.mario.alto * propGenerales.mario.escalaSprite,
-			// y: 0,
-		},
-		velocidad: {
-			x: 0,
-			y: 0,
-		},
-		rutaImagen: './assets/img/sprites-mario-inactivo-derecha-2.png',
-		contadorLimiteCuadros: 5,
-		maximosCuadros: 12,
-		escalaSprite: propGenerales.mario.escalaSprite,
-		gravedad: 1,
-		offset: {
-			x: 0,
-			y: 15,
-		},
-		sprites: {
-			inactivoIzquierda: {
-				rutaImagen: './assets/img/sprites-mario-inactivo-izquierda-2.png',
-				maximosCuadros: '12',
-			},
-			inactivoDerecha: {
-				rutaImagen: './assets/img/sprites-mario-inactivo-derecha-2.png',
-				maximosCuadros: '12',
-			},
-			caminandoIzquierda: {
-				rutaImagen: './assets/img/sprites-mario-caminando-izquierda.png',
-				maximosCuadros: '5',
-			},
-			caminandoDerecha: {
-				rutaImagen: './assets/img/sprites-mario-caminando-derecha.png',
-				maximosCuadros: '5',
-			},
-			saltandoDerecha: {
-				rutaImagen: './assets/img/sprites-mario-saltando-derecha.png',
-				maximosCuadros: '1',
-			},
-			saltandoIzquierda: {
-				rutaImagen: './assets/img/sprites-mario-saltando-izquierda.png',
-				maximosCuadros: '1',
-			},
-		},
-	});
-
-	nubesPequeñas = [];
-	nubesGrandes = [];
-
-	for (let index = 0; index <= propGenerales.cantidadNubes; index++) {
-		nubesPequeñas.push(
-			new Animable({
-				posicion: {
-					x: canvas.width - propGenerales.nubePequeña.ancho + Math.floor(Math.random() * 100 * index) + Math.floor(Math.random() * 1200 + 100),
-					y: Math.floor(Math.random() * canvas.height * 0.2),
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/nube-2.png',
-				contadorLimiteCuadros: 0,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.nubePequeña.escalaSprite,
-				gravedad: 0,
-			}),
-		);
-		nubesGrandes.push(
-			new Animable({
-				posicion: {
-					x: canvas.width - propGenerales.nubePequeña.ancho + Math.floor(Math.random() * 601 * index) + Math.floor(Math.random() * 1200 + 100),
-					y: Math.floor(Math.random() * canvas.height * 0.2),
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/nube-1.png',
-				contadorLimiteCuadros: 0,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.nubeGrande.escalaSprite,
-				gravedad: 1,
-			}),
-		);
-	}
-
-	cespeds = [];
-
-	propGenerales.cesped.posicionX.forEach((cesped) => {
-		cespeds.push(
-			new Sprite({
-				posicion: {
-					x: cesped.x,
-					y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.cesped.alto * propGenerales.cesped.escalaSprite,
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/cesped.png',
-				contadorLimiteCuadros: 1,
-				maximosCuadros: 1,
-				escalaSprite: 1,
-				gravedad: 0,
-			}),
-		);
-	});
-
-	suelos = [];
-	for (let index = 0; index <= canvas.width / (propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite); index++) {
-		suelos.push(
-			new Sprite({
-				posicion: {
-					x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
-					y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite,
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/suelo-1.png',
-				contadorLimiteCuadros: 1,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.suelo.escalaSprite,
-				gravedad: 0,
-			}),
-		);
-		suelos.push(
-			new Sprite({
-				posicion: {
-					x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
-					y: canvas.height - (propGenerales.suelo.alto / 2) * propGenerales.suelo.escalaSprite,
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/suelo-2.png',
-				contadorLimiteCuadros: 1,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.suelo.escalaSprite,
-				gravedad: 0,
-			}),
-		);
-	}
-
-	cercas = [];
-
-	// recorrer array de posiciones (coordenada x) de cada cerca
-	propGenerales.cerca.posicionX.forEach((cerca) => {
-		for (let index = 0; index < cerca.cantidad; index++) {
-			cercas.push(
-				new Sprite({
-					posicion: {
-						x: cerca.x + propGenerales.cerca.ancho * propGenerales.cerca.escalaSprite * index,
-						y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.cerca.alto * propGenerales.cerca.escalaSprite,
-					},
-					velocidad: {
-						x: 0,
-						y: 0,
-					},
-					rutaImagen: './assets/img/madera.png',
-					contadorLimiteCuadros: 1,
-					maximosCuadros: 1,
-					escalaSprite: propGenerales.cerca.escalaSprite,
-					gravedad: 0,
-				}),
-			);
-		}
-	});
-
-	console.log({ florY: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite });
-
-	flores = [];
-	propGenerales.flor.florRoja.posicionX.forEach((flor) => {
-		// flor.x
-		flores.push(
-			new Sprite({
-				posicion: {
-					x: flor.x,
-					y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/flor-1.png',
-				contadorLimiteCuadros: 1,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.flor.escalaSprite,
-				gravedad: 0,
-			}),
-		);
-	});
-	propGenerales.flor.florAmarilla.posicionX.forEach((flor) => {
-		// flor.x
-		flores.push(
-			new Sprite({
-				posicion: {
-					x: flor.x,
-					y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
-				},
-				velocidad: {
-					x: 0,
-					y: 0,
-				},
-				rutaImagen: './assets/img/flor-2.png',
-				contadorLimiteCuadros: 1,
-				maximosCuadros: 1,
-				escalaSprite: propGenerales.flor.escalaSprite,
-				gravedad: 0,
-			}),
-		);
-	});
-}
-
-window.addEventListener('load', (e) => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	ctx = canvas.getContext('2d');
-
-	propGenerales = {
-		mario: {
-			escalaSprite: (canvas.width * 0.3) / 1920,
-			ancho: 3960,
-			alto: 514,
-		},
-		fondo: {
-			ancho: 1008,
-			alto: 480,
-			escalaSprite: canvas.width / 1008,
-		},
-		suelo: {
-			alto: 118,
-			ancho: 185,
-			escalaSprite: canvas.width / 1920,
-		},
-		cantidadNubes: 9,
-		nubePequeña: {
-			ancho: 79,
-			escalaSprite: canvas.width / 1920,
-		},
-		nubeGrande: {
-			ancho: 151,
-			escalaSprite: canvas.width / 1920,
-		},
-		cesped: {
-			ancho: 120,
-			alto: 24,
-			escalaSprite: canvas.width / 1920,
-			y: window.innerHeight - 144,
-			posicionX: [
-				{
-					x: 0,
-				},
-				{
-					x: 500,
-				},
-				{
-					x: 892,
-				},
-				{
-					x: canvas.width - 166 - 120,
-				},
-			],
-		},
-		flor: {
-			ancho: 260,
-			alto: 468,
-			escalaSprite: (canvas.width * 0.22) / 1920,
-			florRoja: {
-				posicionX: [
-					{
-						x: 227,
-					},
-					{
-						x: canvas.width - 260 * 0.22 - 166,
-					},
-				],
-			},
-			florAmarilla: {
-				posicionX: [
-					{
-						x: 227 + 260 * 0.22,
-					},
-					{
-						x: canvas.width - 260 * 0.22 - 166 - 260 * 0.22,
-					},
-				],
-			},
-		},
-		cerca: {
-			ancho: 48,
-			alto: 51,
-			escalaSprite: canvas.width / 1920,
-			posicionX: [
-				{
-					x: 220,
-					cantidad: 4,
-				},
-				{
-					x: canvas.width - 290,
-					cantidad: 4,
-				},
-			],
-		},
-		gravedad: 0.8,
-		teclas: {
-			ArrowLeft: {
-				presionada: false,
-			},
-			ArrowRight: {
-				presionada: false,
-			},
-			ArrowUp: {
-				presionada: false,
-			},
-		},
-	};
-	console.log(propGenerales);
-	iniciar();
+const fondo = new Sprite({
+  posicion: {
+    x: 0,
+    y: 0,
+  },
+  velocidad: {
+    x: 0,
+    y: 0,
+  },
+  rutaImagen: "./assets/img/fondo.png",
+  contadorLimiteCuadros: 1,
+  maximosCuadros: 1,
+  escalaSprite: propGenerales.fondo.escalaSprite,
+  gravedad: 0,
 });
 
+const mario = new Sprite({
+  posicion: {
+    x: canvas.width / 2.5,
+    y: canvas.height -
+       propGenerales.suelo.alto -
+       propGenerales.mario.alto * propGenerales.mario.escalaSprite,
+  },
+  velocidad: {
+    x: 0,
+    y: 0,
+  },
+  rutaImagen: "./assets/img/sprites-mario-inactivo-derecha.png",
+  contadorLimiteCuadros: 7,
+  maximosCuadros: 6,
+  escalaSprite: propGenerales.mario.escalaSprite,
+  gravedad: 1,
+  sprites: {
+    inactivoIzquierda: {
+      rutaImagen: "./assets/img/sprites-mario-inactivo-izquierda.png",
+      maximosCuadros: "6",
+    },
+    inactivoDerecha: {
+      rutaImagen: "./assets/img/sprites-mario-inactivo-derecha.png",
+      maximosCuadros: "6",
+    },
+    caminandoIzquierda: {
+      rutaImagen: "./assets/img/sprites-mario-caminando-izquierda.png",
+      maximosCuadros: "5",
+    },
+    caminandoDerecha: {
+      rutaImagen: "./assets/img/sprites-mario-caminando-derecha.png",
+      maximosCuadros: "5",
+    },
+    saltandoDerecha: {
+      rutaImagen: "./assets/img/sprites-mario-saltando-derecha.png",
+      maximosCuadros: "1",
+    },
+    saltandoIzquierda: {
+      rutaImagen: "./assets/img/sprites-mario-saltando-izquierda.png",
+      maximosCuadros: "1",
+    },
+  },
+});
+
+const nubesPequeñas = [];
+const nubesGrandes = [];
+
+for (let index = 0; index <= propGenerales.cantidadNubes; index++) {
+  nubesPequeñas.push(
+    new Animable({
+      posicion: {
+        x:
+          canvas.width -
+          propGenerales.nubePequeña.ancho +
+          Math.floor(Math.random() * 100 * index) +
+          Math.floor(Math.random() * 1200 + 100),
+        y: Math.floor(Math.random() * 250),
+      },
+      velocidad: {
+        x: 0,
+        y: 0,
+      },
+      rutaImagen: "./assets/img/nube-2.png",
+      contadorLimiteCuadros: 0,
+      maximosCuadros: 1,
+      escalaSprite: propGenerales.nubePequeña.escalaSprite,
+      gravedad: 1,
+    })
+  );
+  nubesGrandes.push(
+    new Animable({
+      posicion: {
+        x:
+          canvas.width -
+          propGenerales.nubePequeña.ancho +
+          Math.floor(Math.random() * 601 * index) +
+          Math.floor(Math.random() * 1200 + 100),
+        y: Math.floor(Math.random() * 250),
+      },
+      velocidad: {
+        x: 0,
+        y: 0,
+      },
+      rutaImagen: "./assets/img/nube-1.png",
+      contadorLimiteCuadros: 0,
+      maximosCuadros: 1,
+      escalaSprite: propGenerales.nubeGrande.escalaSprite,
+      gravedad: 1,
+    })
+  );
+}
+
+const cespeds = [];
+
+propGenerales.cesped.posicionX.forEach((cesped) => {
+  cespeds.push(
+    new Sprite({
+      posicion: {
+        x: cesped.x,
+        y: canvas.height - propGenerales.suelo.alto - propGenerales.cesped.alto,
+      },
+      velocidad: {
+        x: 0,
+        y: 0,
+      },
+      rutaImagen: "./assets/img/cesped.png",
+      contadorLimiteCuadros: 1,
+      maximosCuadros: 1,
+      escalaSprite: 1,
+      gravedad: 0,
+    })
+  );
+});
+
+// const suelo = new Sprite({
+//   posicion: {
+//     x: 0,
+//     y: canvas.height - propGenerales.suelo.alto,
+//   },
+//   velocidad: {
+//     x: 0,
+//     y: 0,
+//   },
+//   rutaImagen: "./assets/img/suelo-1.png",
+//   contadorLimiteCuadros: 1,
+//   maximosCuadros: 1,
+//   escalaSprite:1,
+//   gravedad: 1,
+// });
+
+const suelos = [];
+for (let index = 0; index <= canvas.width / propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite; index++) {
+    suelos.push(
+        new Sprite({
+            posicion: {
+            x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
+            y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite,
+            },
+            velocidad: {
+            x: 0,
+            y: 0,
+            },
+            rutaImagen: "./assets/img/suelo-1.png",
+            contadorLimiteCuadros: 1,
+            maximosCuadros: 1,
+            escalaSprite:propGenerales.suelo.escalaSprite,
+            gravedad: 0,    
+        })
+    )
+    suelos.push(
+        new Sprite({
+            posicion: {
+            x: index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite,
+            y: canvas.height  - propGenerales.suelo.alto/2 * propGenerales.suelo.escalaSprite,
+            },
+            velocidad: {
+            x: 0,
+            y: 0,
+            },
+            rutaImagen: "./assets/img/suelo-2.png",
+            contadorLimiteCuadros: 1,
+            maximosCuadros: 1,
+            escalaSprite: propGenerales.suelo.escalaSprite,
+            gravedad: 0,    
+        })
+    )
+}
+
+
+
+
+const cercas = [];
+
+// recorrer array de posiciones (coordenada x) de cada cerca
+propGenerales.cerca.posicionX.forEach((cerca) => {
+  for (let index = 0; index < cerca.cantidad; index++) {
+    cercas.push(
+      new Sprite({
+        posicion: {
+          x: cerca.x + propGenerales.cerca.ancho * index,
+          y:
+            canvas.height - propGenerales.suelo.alto - propGenerales.cerca.alto,
+        },
+        velocidad: {
+          x: 0,
+          y: 0,
+        },
+        rutaImagen: "./assets/img/madera.png",
+        contadorLimiteCuadros: 1,
+        maximosCuadros: 1,
+        escalaSprite: 1,
+        gravedad: 1,
+      })
+    );
+  }
+});
+
+const flores = [];
+
+propGenerales.flor.florRoja.posicionX.forEach((flor) => {
+  // flor.x
+  flores.push(
+    new Sprite({
+      posicion: {
+        x: flor.x,
+        y:
+          canvas.height -
+          propGenerales.suelo.alto -
+          propGenerales.flor.alto * propGenerales.flor.escalaSprite,
+      },
+      velocidad: {
+        x: 0,
+        y: 0,
+      },
+      rutaImagen: "./assets/img/flor-1.png",
+      contadorLimiteCuadros: 1,
+      maximosCuadros: 1,
+      escalaSprite: propGenerales.flor.escalaSprite,
+      gravedad: 1,
+    })
+  );
+});
+propGenerales.flor.florAmarilla.posicionX.forEach((flor) => {
+  // flor.x
+  flores.push(
+    new Sprite({
+      posicion: {
+        x: flor.x,
+        y:
+          canvas.height -
+          propGenerales.suelo.alto -
+          propGenerales.flor.alto * propGenerales.flor.escalaSprite,
+      },
+      velocidad: {
+        x: 0,
+        y: 0,
+      },
+      rutaImagen: "./assets/img/flor-2.png",
+      contadorLimiteCuadros: 1,
+      maximosCuadros: 1,
+      escalaSprite: propGenerales.flor.escalaSprite,
+      gravedad: 1,
+    })
+  );
+});
+
+iniciar();
+
 function iniciar() {
-	instanciarObjetos();
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-	animar();
+    const proporcion = 1920 / canvas.width;
 
-	function animar() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // canvas.style.transform = `scale${proporcion}`
 
-		// fondo.actualizarSprite();
-		for (const index in nubesPequeñas) {
-			nubesPequeñas[index].actualizarSprite();
-			nubesGrandes[index].actualizarSprite();
-		}
+    // fondo 1008 => 100
+    // 1920  => x
 
-		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
-		//   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
-		//   suelo.actualizarSprite();
-		// }
+    // nubes
+    // cesped
+    // piso
+    // mario
+    // flores
+    // fondo
+  });
 
-		// console.log({suelo: canvas.height - propGenerales.suelo.alto });
+  animar();
 
-		suelos.forEach((suelo) => {
-			suelo.actualizarSprite();
-			// console.log({suelo: suelo.posicion.y});
-		});
+  function animar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		// suelo.actualizarSprite();
-		cespeds.forEach((s) => {
-			// console.log({pasto: s.posicion.y});
-			s.actualizarSprite();
-		});
+    fondo.actualizarSprite();
+    for (const index in nubesPequeñas) {
+      nubesPequeñas[index].actualizarSprite();
+      nubesGrandes[index].actualizarSprite();
+    }
 
-		flores.forEach((flor) => {
-			// console.log({flor: flor.posicion.y});
-			flor.actualizarSprite();
-		});
-		cercas.forEach((cerca) => {
-			cerca.actualizarSprite();
-			// console.log({cerca:cerca.posicion.y});
-		});
-		mario.actualizarSprite();
+    // for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
+    //   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
+    //   suelo.actualizarSprite();
+    // }
 
-		requestAnimationFrame(animar);
-	}
+    suelos.forEach( suelo => suelo.actualizarSprite())
 
-	document.addEventListener('keydown', (e) => {
-		if (e.key === 'ArrowLeft') {
-			propGenerales.teclas.ArrowLeft.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowLeft';
-		}
-		if (e.key === 'ArrowRight') {
-			propGenerales.teclas.ArrowRight.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowRight';
-		}
-		if (e.key === 'ArrowUp') {
-			propGenerales.teclas.ArrowUp.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowUp';
-		}
-	});
+    // suelo.actualizarSprite();
+    cespeds.forEach((s) => s.actualizarSprite());
+    flores.forEach((flor) => flor.actualizarSprite());
+    cercas.forEach((cerca) => cerca.actualizarSprite());
+    mario.actualizarSprite();
 
-	document.addEventListener('keyup', (e) => {
-		if (e.key === 'ArrowLeft') {
-			propGenerales.teclas.ArrowLeft.presionada = false;
-		}
-		if (e.key === 'ArrowRight') {
-			propGenerales.teclas.ArrowRight.presionada = false;
-		}
-		if (e.key === 'ArrowUp') {
-			propGenerales.teclas.ArrowUp.presionada = false;
-		}
-	});
+    requestAnimationFrame(animar);
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      propGenerales.teclas.ArrowLeft.presionada = true;
+      mario.ultimaTeclaPresiona = "ArrowLeft";
+    }
+    if (e.key === "ArrowRight") {
+      propGenerales.teclas.ArrowRight.presionada = true;
+      mario.ultimaTeclaPresiona = "ArrowRight";
+    }
+    if (e.key === "ArrowUp") {
+      propGenerales.teclas.ArrowUp.presionada = true;
+      mario.ultimaTeclaPresiona = "ArrowUp";
+    }
+  });
+
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowLeft") {
+      propGenerales.teclas.ArrowLeft.presionada = false;
+    }
+    if (e.key === "ArrowRight") {
+      propGenerales.teclas.ArrowRight.presionada = false;
+    }
+    if (e.key === "ArrowUp") {
+      propGenerales.teclas.ArrowUp.presionada = false;
+    }
+  });
 }

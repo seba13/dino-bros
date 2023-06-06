@@ -22,13 +22,13 @@ var Sprite =
 /*#__PURE__*/
 function () {
   /**
-   *
-   * @param {object} posicion
-   * @param {object} velocidad
-   * @param {string} rutaImagen
-   * @param {number} maximosCuadros
-   * @param {number} escalaSprite
-   * @param {string[]} sprites
+   * 
+   * @param {object} posicion 
+   * @param {object} velocidad 
+   * @param {string} rutaImagen 
+   * @param {number} maximosCuadros 
+   * @param {number} escalaSprite 
+   * @param {string[]} sprites 
    */
   function Sprite(_ref) {
     var posicion = _ref.posicion,
@@ -47,7 +47,7 @@ function () {
 
     this.posicion = posicion;
     this.velocidad = velocidad;
-    this.imagen = document.createElement('img');
+    this.imagen = document.createElement("img");
     this.imagen.src = rutaImagen;
     this.maximosCuadros = maximosCuadros;
     this.cuadroActual = 0;
@@ -58,7 +58,7 @@ function () {
     this.gravedad = gravedad;
     this.ultimaTeclaPresiona = '';
     this.ultimaDireccion = 'derecha';
-    this.coordenadaSuelo = canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite;
+    this.coordenadaSuelo = canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite;
 
     for (var sprite in sprites) {
       this.sprites[sprite].imagen = document.createElement('img');
@@ -87,7 +87,7 @@ function () {
 
 
       if (this.gravedad === 1) {
-        if (this.posicion.y + this.velocidad.y < this.coordenadaSuelo) {
+        if (this.posicion.y + this.velocidad.y - 2 + this.imagen.height * this.escalaSprite < this.coordenadaSuelo) {
           this.velocidad.y += 1;
           this.posicion.y += this.velocidad.y;
         } else {
@@ -107,7 +107,6 @@ function () {
           if (this.imagen != this.sprites['caminandoDerecha'].imagen) {
             this.imagen = this.sprites['caminandoDerecha'].imagen;
             this.maximosCuadros = this.sprites['caminandoDerecha'].maximosCuadros;
-            this.cuadroActual = 0;
           }
 
           if (this.posicion.x + 10 + this.imagen.width / this.maximosCuadros * this.escalaSprite < canvas.width) {
@@ -119,7 +118,6 @@ function () {
           if (this.imagen != this.sprites['caminandoIzquierda'].imagen) {
             this.imagen = this.sprites['caminandoIzquierda'].imagen;
             this.maximosCuadros = this.sprites['caminandoIzquierda'].maximosCuadros;
-            this.cuadroActual = 0;
           }
 
           if (this.posicion.x - 10 > 0) {
@@ -133,13 +131,11 @@ function () {
             if (this.imagen != this.sprites['saltandoDerecha'].imagen) {
               this.imagen = this.sprites['saltandoDerecha'].imagen;
               this.maximosCuadros = this.sprites['saltandoDerecha'].maximosCuadros;
-              this.cuadroActual = 0;
             }
           } else if (this.ultimaDireccion == 'izquierda') {
             if (this.imagen != this.sprites['saltandoIzquierda'].imagen) {
               this.imagen = this.sprites['saltandoIzquierda'].imagen;
               this.maximosCuadros = this.sprites['saltandoIzquierda'].maximosCuadros;
-              this.cuadroActual = 0;
             }
           }
 
@@ -147,35 +143,31 @@ function () {
         } // si no se está presionando ninguna tecla
         else {
             if (this.ultimaTeclaPresiona == 'ArrowUp') {
-              if (this.posicion.y + this.velocidad.y > this.coordenadaSuelo) {
+              if (this.posicion.y + this.velocidad.y + this.imagen.height * this.escalaSprite > this.coordenadaSuelo) {
                 if (this.ultimaDireccion === 'derecha') {
                   this.imagen = this.sprites['inactivoDerecha'].imagen;
                   this.maximosCuadros = this.sprites['inactivoDerecha'].maximosCuadros;
-                  this.cuadroActual = 0;
                 }
 
                 if (this.ultimaDireccion === 'izquierda') {
                   this.imagen = this.sprites['inactivoIzquierda'].imagen;
                   this.maximosCuadros = this.sprites['inactivoIzquierda'].maximosCuadros;
-                  this.cuadroActual = 0;
                 }
               }
             } else {
               if (this.ultimaDireccion === 'derecha') {
                 this.imagen = this.sprites['inactivoDerecha'].imagen;
                 this.maximosCuadros = this.sprites['inactivoDerecha'].maximosCuadros;
-                this.cuadroActual = 0;
               }
 
               if (this.ultimaDireccion === 'izquierda') {
                 this.imagen = this.sprites['inactivoIzquierda'].imagen;
                 this.maximosCuadros = this.sprites['inactivoIzquierda'].maximosCuadros;
-                this.cuadroActual = 0;
               }
             }
           }
       } else {
-        console.log('no sprites');
+        console.log("no sprites");
       }
     }
   }, {
