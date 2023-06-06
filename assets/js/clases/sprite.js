@@ -26,7 +26,7 @@ class Sprite{
          this.ultimaTeclaPresiona = '';
          this.ultimaDireccion = 'derecha';
  
-         this.coordenadaSuelo = canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite
+         this.coordenadaSuelo = canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite
          for(const sprite in sprites) {
              this.sprites[sprite].imagen = document.createElement('img')
              this.sprites[sprite].imagen.src = this.sprites[sprite].rutaImagen
@@ -66,7 +66,7 @@ class Sprite{
          // mover sprite en canvas
          // aplica gravedad solo a los que tenga gravedad 1
          if(this.gravedad === 1) {
-             if(this.posicion.y + this.velocidad.y - 2 +  this.imagen.height  * this.escalaSprite < this.coordenadaSuelo) {
+             if(this.posicion.y + this.velocidad.y < this.coordenadaSuelo) {
                  this.velocidad.y += 1
                  this.posicion.y += this.velocidad.y
              } else {
@@ -137,7 +137,7 @@ class Sprite{
                  
  
                  if(this.ultimaTeclaPresiona == 'ArrowUp'){
-                     if(this.posicion.y + this.velocidad.y + this.imagen.height * this.escalaSprite > this.coordenadaSuelo) {
+                     if(this.posicion.y + this.velocidad.y > this.coordenadaSuelo) {
                          if(this.ultimaDireccion === 'derecha') {
      
                              this.imagen = this.sprites['inactivoDerecha'].imagen
