@@ -231,13 +231,13 @@ function instanciarObjetos() {
   });
 }
 
-window.addEventListener("load", function (e) {
+window.addEventListener('load', function (e) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   ctx = canvas.getContext('2d');
   propGenerales = {
     mario: {
-      escalaSprite: canvas.width * .3 / 1920,
+      escalaSprite: canvas.width * 0.3 / 1920,
       ancho: 3960,
       alto: 514
     },
@@ -278,7 +278,7 @@ window.addEventListener("load", function (e) {
     flor: {
       ancho: 260,
       alto: 468,
-      escalaSprite: canvas.width * .22 / 1920,
+      escalaSprite: canvas.width * 0.22 / 1920,
       florRoja: {
         posicionX: [{
           x: 227
@@ -306,7 +306,7 @@ window.addEventListener("load", function (e) {
         cantidad: 4
       }]
     },
-    gravedad: .8,
+    gravedad: 0.8,
     teclas: {
       ArrowLeft: {
         presionada: false

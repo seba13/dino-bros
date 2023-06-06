@@ -8,17 +8,7 @@ class Sprite {
 	 * @param {number} escalaSprite
 	 * @param {string[]} sprites
 	 */
-	constructor({
-		posicion,
-		velocidad,
-		rutaImagen,
-		maximosCuadros,
-		offset = { x: 0, y: 0 },
-		contadorLimiteCuadros,
-		escalaSprite = 1,
-		gravedad = 0,
-		sprites = undefined,
-	}) {
+	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, offset = { x: 0, y: 0 }, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
 		this.posicion = posicion;
 		this.velocidad = velocidad;
 		this.imagen = document.createElement('img');
@@ -80,10 +70,7 @@ class Sprite {
 
 			this.posicion.x += this.velocidad.x;
 
-			if (
-				this.posicion.y + this.velocidad.y >
-				canvas.height - this.imagen.height * this.escalaSprite - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite
-			) {
+			if (this.posicion.y + this.velocidad.y + propGenerales.gravedad > canvas.height - this.imagen.height * this.escalaSprite - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite) {
 				this.velocidad.y = 0;
 			} else {
 				this.velocidad.y += propGenerales.gravedad;
@@ -110,9 +97,7 @@ class Sprite {
 			this.coordenadaSalto = Math.floor(this.posicion.y + this.velocidad.y);
 
 			// define la posicion actual del piso
-			this.coordenadaSuelo = Math.floor(
-				canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite,
-			);
+			this.coordenadaSuelo = Math.floor(canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite);
 
 			if (this.ultimaTeclaPresiona === accion && propGenerales.teclas.ArrowRight.presionada) {
 				if (this.coordenadaSalto >= this.coordenadaSuelo) {
@@ -240,8 +225,7 @@ class Animable extends Sprite {
 		this.posicion.x -= 1;
 
 		if (this.posicion.x + this.imagen.width * this.escalaSprite < 0) {
-			this.posicion.x =
-				canvas.width - propGenerales.nubePequeña.ancho + Math.floor(Math.random() * 601) + Math.floor(Math.random() * 1200 + 100);
+			this.posicion.x = canvas.width - propGenerales.nubePequeña.ancho + Math.floor(Math.random() * 601) + Math.floor(Math.random() * 1200 + 100);
 
 			this.posicion.y = Math.floor(Math.random() * 250);
 		}
