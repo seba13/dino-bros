@@ -355,7 +355,9 @@ function instanciarObjetos() {
     });
 }
 
-iniciar();
+window.addEventListener("load", (e) => {
+    iniciar();
+})
 
 function iniciar() {
 
