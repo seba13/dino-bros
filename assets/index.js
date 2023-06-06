@@ -375,8 +375,8 @@ function iniciar() {
 
 		// fondo.actualizarSprite();
 		for (const index in nubesPequeñas) {
-			nubesPequeñas[index].actualizarSprite();
-			nubesGrandes[index].actualizarSprite();
+			// nubesPequeñas[index].actualizarSprite();
+			// nubesGrandes[index].actualizarSprite();
 		}
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
@@ -387,27 +387,27 @@ function iniciar() {
         console.log({suelo: canvas.height - propGenerales.suelo.alto });
 
 		suelos.forEach((suelo) => {
-            suelo.actualizarSprite()
+            // suelo.actualizarSprite()
             // console.log({suelo: suelo.posicion.y});
         });
 
 		// suelo.actualizarSprite();
 		cespeds.forEach((s) => {
-            console.log({pasto: s.posicion.y});
-            s.actualizarSprite()
+            // console.log({pasto: s.posicion.y});
+            // s.actualizarSprite()
         });
         
 
 
 		flores.forEach((flor) => {
-            console.log({flor: flor.posicion.y});
+            // console.log({flor: flor.posicion.y});
             flor.actualizarSprite()
         });
 		cercas.forEach((cerca) => {
-            cerca.actualizarSprite()
-            console.log({cerca:cerca.posicion.y});
+            // cerca.actualizarSprite()
+            // console.log({cerca:cerca.posicion.y});
         });
-		mario.actualizarSprite();
+		// mario.actualizarSprite();
 
 		requestAnimationFrame(animar);
 	}

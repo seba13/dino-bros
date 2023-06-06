@@ -80,12 +80,22 @@ class Sprite{
              this.posicion.y += this.velocidad.y
              this.posicion.x += this.velocidad.x
              this.velocidad.y += propGenerales.gravedad
- 
- 
+             
+
+            console.log({posicionY: this.posicion.y});
+            console.log({velocidadY: this.velocidad.y});
+
+
+            console.log({suelo: canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite});
+            
              if(this.posicion.y + this.velocidad.y > canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite) {
  
                  this.velocidad.y = 0
              }
+
+             
+            
+
              if(this.posicion.x < - this.imagen.width * this.escalaSprite) {
                  console.log("entra aca");
                  this.posicion.x = canvas.width 
