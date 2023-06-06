@@ -43,7 +43,7 @@ function instanciarObjetos() {
     mario = new Sprite({
         posicion: {
             x: canvas.width / 2.5,
-            y: canvas.height - propGenerales.suelo.alto - propGenerales.mario.alto * propGenerales.mario.escalaSprite ,
+            y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.mario.alto * propGenerales.mario.escalaSprite ,
             // y: 0,
         },
         velocidad: {
@@ -134,7 +134,7 @@ function instanciarObjetos() {
             new Sprite({
                 posicion: {
                     x: cesped.x,
-                    y: canvas.height - propGenerales.suelo.alto - propGenerales.cesped.alto,
+                    y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.cesped.alto * propGenerales.cesped.escalaSprite,
                 },
                 velocidad: {
                     x: 0,
@@ -196,7 +196,7 @@ function instanciarObjetos() {
                 new Sprite({
                     posicion: {
                         x: cerca.x + propGenerales.cerca.ancho * propGenerales.cerca.escalaSprite * index,
-                        y: canvas.height - propGenerales.suelo.alto - propGenerales.cerca.alto,
+                        y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.cerca.alto * propGenerales.cerca.escalaSprite,
                     },
                     velocidad: {
                         x: 0,
@@ -213,16 +213,13 @@ function instanciarObjetos() {
     });
     
     flores = [];
-
-    console.log({flores:{y: canvas.height - propGenerales.suelo.alto - propGenerales.flor.alto * propGenerales.flor.escalaSprite}});
-    
     propGenerales.flor.florRoja.posicionX.forEach((flor) => {
         // flor.x
         flores.push(
             new Sprite({
                 posicion: {
                     x: flor.x,
-                    y: canvas.height - propGenerales.suelo.alto - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
+                    y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
                 },
                 velocidad: {
                     x: 0,
@@ -242,7 +239,7 @@ function instanciarObjetos() {
             new Sprite({
                 posicion: {
                     x: flor.x,
-                    y: canvas.height - propGenerales.suelo.alto - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
+                    y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite,
                 },
                 velocidad: {
                     x: 0,

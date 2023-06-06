@@ -82,10 +82,15 @@ class Sprite{
              
 
             console.log({posicionY: this.posicion.y});
-            console.log({velocidadY: this.velocidad.y});
+            console.log({imagen: this.imagen.height});
+            console.log({escalado: this.escalaSprite});
+            console.log({'imagen escalada' :this.imagen.height * this.escalaSprite});
+            console.log({"flores dentro":{y: canvas.height - propGenerales.suelo.alto - propGenerales.flor.alto * propGenerales.flor.escalaSprite}});
 
 
-            console.log({suelo: canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite});
+            console.log({canvasHeight : canvas.height});
+            console.log({sueloAlto: propGenerales.suelo.alto});
+            console.log({sueloEscalado: propGenerales.suelo.escalaSprite});
 
              if(this.posicion.y + this.velocidad.y > canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite) {
  
