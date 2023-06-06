@@ -17,104 +17,7 @@ const canvas = document.querySelector('canvas');
 let ctx ;
 
 
-const propGenerales = {
-	mario: {
-		escalaSprite: canvas.width * .3 / 1920,
-		ancho: 3960,
-		alto: 514,
-	},
-	fondo: {
-		ancho: 1008,
-		alto: 480,
-		escalaSprite: canvas.width/1008,
-	},
-	suelo: {
-		alto: 118,
-		ancho: 185,
-		escalaSprite: canvas.width/1920,
-	},
-	cantidadNubes: 9,
-	nubePequeña: {
-		ancho: 79,
-		escalaSprite: canvas.width/1920,
-	},
-	nubeGrande: {
-		ancho: 151,
-		escalaSprite: canvas.width/1920,
-	},
-	cesped: {
-		ancho: 120,
-		alto: 24,
-		escalaSprite: canvas.width/1920,
-		y: window.innerHeight - 144,
-		posicionX: [
-			{
-				x: 0,
-			},
-			{
-				x: 500,
-			},
-			{
-				x: 892,
-			},
-			{
-				x: canvas.width - 166 - 120,
-			},
-		],
-	},
-	flor: {
-		ancho: 260,
-		alto: 468,
-		escalaSprite: canvas.width *.22 / 1920,
-		florRoja: {
-			posicionX: [
-				{
-					x: 227,
-				},
-				{
-					x: canvas.width - 260 * 0.22 - 166,
-				},
-			],
-		},
-		florAmarilla: {
-			posicionX: [
-				{
-					x: 227 + 260 * 0.22,
-				},
-				{
-					x: canvas.width - 260 * 0.22 - 166 - 260 * 0.22,
-				},
-			],
-		},
-	},
-	cerca: {
-		ancho: 48,
-		alto: 51,
-		escalaSprite: canvas.width/1920,
-		posicionX: [
-			{
-				x: 220,
-				cantidad: 4,
-			},
-			{
-				x: canvas.width - 290,
-				cantidad: 4,
-			},
-		],
-	},
-	gravedad: .8,
-	teclas: {
-		ArrowLeft: {
-			presionada: false,
-		},
-		ArrowRight: {
-			presionada: false,
-		},
-		ArrowUp: {
-			presionada: false,
-		},
-	},
-};
+let propGenerales
 
 
 let mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
@@ -357,6 +260,106 @@ window.addEventListener("load", (e) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     ctx = canvas.getContext('2d');
+
+
+    propGenerales = {
+        mario: {
+            escalaSprite: canvas.width * .3 / 1920,
+            ancho: 3960,
+            alto: 514,
+        },
+        fondo: {
+            ancho: 1008,
+            alto: 480,
+            escalaSprite: canvas.width/1008,
+        },
+        suelo: {
+            alto: 118,
+            ancho: 185,
+            escalaSprite: canvas.width/1920,
+        },
+        cantidadNubes: 9,
+        nubePequeña: {
+            ancho: 79,
+            escalaSprite: canvas.width/1920,
+        },
+        nubeGrande: {
+            ancho: 151,
+            escalaSprite: canvas.width/1920,
+        },
+        cesped: {
+            ancho: 120,
+            alto: 24,
+            escalaSprite: canvas.width/1920,
+            y: window.innerHeight - 144,
+            posicionX: [
+                {
+                    x: 0,
+                },
+                {
+                    x: 500,
+                },
+                {
+                    x: 892,
+                },
+                {
+                    x: canvas.width - 166 - 120,
+                },
+            ],
+        },
+        flor: {
+            ancho: 260,
+            alto: 468,
+            escalaSprite: canvas.width *.22 / 1920,
+            florRoja: {
+                posicionX: [
+                    {
+                        x: 227,
+                    },
+                    {
+                        x: canvas.width - 260 * 0.22 - 166,
+                    },
+                ],
+            },
+            florAmarilla: {
+                posicionX: [
+                    {
+                        x: 227 + 260 * 0.22,
+                    },
+                    {
+                        x: canvas.width - 260 * 0.22 - 166 - 260 * 0.22,
+                    },
+                ],
+            },
+        },
+        cerca: {
+            ancho: 48,
+            alto: 51,
+            escalaSprite: canvas.width/1920,
+            posicionX: [
+                {
+                    x: 220,
+                    cantidad: 4,
+                },
+                {
+                    x: canvas.width - 290,
+                    cantidad: 4,
+                },
+            ],
+        },
+        gravedad: .8,
+        teclas: {
+            ArrowLeft: {
+                presionada: false,
+            },
+            ArrowRight: {
+                presionada: false,
+            },
+            ArrowUp: {
+                presionada: false,
+            },
+        },
+    };
     console.log(propGenerales);
     iniciar();
 })
