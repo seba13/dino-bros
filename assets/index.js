@@ -144,7 +144,7 @@ function instanciarObjetos() {
                 contadorLimiteCuadros: 1,
                 maximosCuadros: 1,
                 escalaSprite: 1,
-                gravedad: 1,
+                gravedad: 0,
             }),
         );
     });
