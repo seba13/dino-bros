@@ -448,6 +448,7 @@ let x= 0;
 let y = 0;
 
 document.addEventListener('pointerdown', (e) => {
+	alert(e.pointerType);
 	x = e.clientX;
 })
 
@@ -457,6 +458,8 @@ document.addEventListener("pointermove", (e) => {
 
 document.addEventListener("pointerup", (e) => {
 	let x2 = e.clientX;
+
+	
 
 	if(x2 - x > 0) {
 		alert('derecha')
