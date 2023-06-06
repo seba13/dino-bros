@@ -444,12 +444,24 @@ function iniciar() {
 	
 }
 
-DeviceMotionEvent.requestPermission()
-      .then(response => {
-        if (response == "granted") {
-          window.addEventListener("devicemotion", e => {
-            console.log(e.acceleration)
-          });
-        }
-      })
-      .catch(console.error);
+let x= 0;
+let y = 0;
+
+document.addEventListener('pointerdown', (e) => {
+	x = e.clientX;
+})
+
+document.addEventListener("pointermove", (e) => {
+	e.preventDefault();
+})
+
+document.addEventListener("pointerup", (e) => {
+	let x2 = e.clientX;
+
+	if(x2 - x > 0) {
+		alert('derecha')
+	}else {
+		alert('izquierda')
+	}
+
+})
