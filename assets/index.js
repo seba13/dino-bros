@@ -213,6 +213,8 @@ function instanciarObjetos() {
     });
     
     flores = [];
+
+    console.log({flores:{y: canvas.height - propGenerales.suelo.alto - propGenerales.flor.alto * propGenerales.flor.escalaSprite}});
     
     propGenerales.flor.florRoja.posicionX.forEach((flor) => {
         // flor.x

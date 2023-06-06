@@ -54,7 +54,6 @@ class Sprite{
      animarSprite() {
          this.contadorCuadros++
          
- 
          // cambia de un cuadro a otro
          if((this.contadorCuadros % this.contadorLimiteCuadros) === 0) {
  
@@ -87,7 +86,7 @@ class Sprite{
 
 
             console.log({suelo: canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite});
-            
+
              if(this.posicion.y + this.velocidad.y > canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite) {
  
                  this.velocidad.y = 0
