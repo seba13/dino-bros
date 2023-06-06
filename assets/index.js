@@ -14,10 +14,8 @@
 // REINICIAR JUEGO
 
 const canvas = document.querySelector('canvas');
+let ctx ;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const ctx = canvas.getContext('2d');
 
 const propGenerales = {
 	mario: {
@@ -356,6 +354,10 @@ function instanciarObjetos() {
 }
 
 window.addEventListener("load", (e) => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx = canvas.getContext('2d');
+    console.log(propGenerales);
     iniciar();
 })
 
