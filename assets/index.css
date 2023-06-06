@@ -16,9 +16,16 @@ body {
 {
     width: 100%;
     height: 100vh;
-    overflow: hidden;
+    display: flex;
 }
 
 canvas {
-    overflow: hidden;
+    background-image: url('./img/fondo.png');
+    background-size: cover;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+
+    width: 100%;
+    object-fit: cover;
+    object-position: bottom center;
 }
