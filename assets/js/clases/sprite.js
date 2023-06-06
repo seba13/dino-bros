@@ -76,14 +76,16 @@ class Sprite{
              //     this.velocidad.y = 0
              // }
              
-             this.posicion.y += this.velocidad.y
              this.posicion.x += this.velocidad.x
              this.velocidad.y += propGenerales.gravedad
              
-
+             
              if(this.posicion.y + this.velocidad.y > canvas.height - this.imagen.height * this.escalaSprite  - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite) {
- 
+                 
                  this.velocidad.y = 0
+                }else {
+                    
+                    this.posicion.y += this.velocidad.y
              }
 
              
@@ -255,7 +257,7 @@ class Sprite{
  
      actualizarSprite() {
          this.dibujar()
-        //  this.animarSprite()
+         this.animarSprite()
      }
  
  }
