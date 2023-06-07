@@ -14,13 +14,17 @@
 // REINICIAR JUEGO
 
 const canvas = document.querySelector('canvas');
+
 let ctx ;
+
 
 
 let propGenerales
 
 
 let mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
+
+
 
 
 function instanciarObjetos() {
@@ -57,7 +61,7 @@ function instanciarObjetos() {
         gravedad: 1,
         offset : {
             x: 0,
-            y: 15,
+            y: 10,
         },
         sprites: {
             inactivoIzquierda: {
@@ -191,6 +195,7 @@ function instanciarObjetos() {
     
     // recorrer array de posiciones (coordenada x) de cada cerca
     propGenerales.cerca.posicionX.forEach((cerca) => {
+		
         for (let index = 0; index < cerca.cantidad; index++) {
             cercas.push(
                 new Sprite({
@@ -257,42 +262,70 @@ function instanciarObjetos() {
     });
 }
 
+
+
+function esDispositivoMovil() {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+let proporcion = 1920 * .9 / window.innerWidth 
+
 window.addEventListener("load", (e) => {
+
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+	if(esDispositivoMovil()) {
+
+		proporcion = 1.8
+		document.addEventListener("pointerdown", (e) => {
+
+		
+			if (canvas.requestFullscreen) {
+				canvas.requestFullscreen();
+			  }
+
+		})
+	}
+
+
+	aspectRatio = canvas.width / canvas.height;
+	console.log({aspectRatio});
     ctx = canvas.getContext('2d');
 
 
     propGenerales = {
         mario: {
-            escalaSprite: canvas.width * .3 / 1920,
+            escalaSprite: canvas.width * .3 / ( window.innerWidth * proporcion ),
             ancho: 3960,
             alto: 514,
         },
+		// 1008 => 100
+		// 1920 => x
         fondo: {
             ancho: 1008,
             alto: 480,
-            escalaSprite: canvas.width/1008,
+            escalaSprite: canvas.width *  ( window.innerWidth * proporcion ),
         },
         suelo: {
             alto: 118,
             ancho: 185,
-            escalaSprite: canvas.width/1920,
+            escalaSprite: canvas.width  / ( window.innerWidth * proporcion ),
         },
         cantidadNubes: 9,
         nubePequeña: {
             ancho: 79,
-            escalaSprite: canvas.width/1920,
+            escalaSprite: canvas.width  / ( window.innerWidth * proporcion ),
         },
         nubeGrande: {
             ancho: 151,
-            escalaSprite: canvas.width/1920,
+            escalaSprite: canvas.width  / ( window.innerWidth * proporcion ),
         },
         cesped: {
             ancho: 120,
             alto: 24,
-            escalaSprite: canvas.width/1920,
-            y: window.innerHeight - 144,
+            escalaSprite: canvas.width  / ( window.innerWidth * proporcion ),
+            y: window.innerHeight - 144 * (canvas.width  / ( window.innerWidth * proporcion )),
             posicionX: [
                 {
                     x: 0,
@@ -311,24 +344,24 @@ window.addEventListener("load", (e) => {
         flor: {
             ancho: 260,
             alto: 468,
-            escalaSprite: canvas.width *.22 / 1920,
+            escalaSprite: canvas.width * .22  / ( window.innerWidth * proporcion ),
             florRoja: {
                 posicionX: [
                     {
-                        x: 227,
+                        x: (227 / 1920) * canvas.width,
                     },
                     {
-                        x: canvas.width - 260 * 0.22 - 166,
+                        x: ((1708 / 1920) * canvas.width) - (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260 ,
                     },
                 ],
             },
             florAmarilla: {
                 posicionX: [
                     {
-                        x: 227 + 260 * 0.22,
+                        x: ((227 / 1920) * canvas.width) + (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260,
                     },
                     {
-                        x: canvas.width - 260 * 0.22 - 166 - 260 * 0.22,
+                        x: ((1708	 / 1920) * canvas.width) - (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260 * 2,
                     },
                 ],
             },
@@ -336,14 +369,14 @@ window.addEventListener("load", (e) => {
         cerca: {
             ancho: 48,
             alto: 51,
-            escalaSprite: canvas.width/1920,
+            escalaSprite: canvas.width  / ( window.innerWidth * proporcion ),
             posicionX: [
                 {
-                    x: 220,
+                    x: (180 / 1920) * canvas.width,
                     cantidad: 4,
                 },
                 {
-                    x: canvas.width - 290,
+                    x: (1530 / 1920 ) * canvas.width,
                     cantidad: 4,
                 },
             ],
@@ -440,31 +473,96 @@ function iniciar() {
 		}
 	});
 
+
+	function resize(e) {
+	
+		// 1920/973 => 1.1
+		// width/height => x
+		if(screen.orientation.angle % 90 === 0) {
+
+			canvas.width = window.innerHeight
+			canvas.height = window.innerWidth
+		}else {
+			canvas.width = window.innerWidth
+			canvas.height = window.innerHeight
+		}
+
+		instanciarObjetos()
+	}
+
+	
+
+	
+	window.addEventListener('resize', () => {
+
+		if(!esDispositivoMovil()) {
+			canvas.width = window.innerWidth
+			canvas.height = window.innerHeight
+
+			proporcion = 1920 * .9 / window.innerWidth 
+
+			propGenerales.mario.escalaSprite = canvas.width * .3 / ( window.innerWidth * proporcion )
+
+			propGenerales.cesped.escalaSprite = canvas.width  / ( window.innerWidth * proporcion )
+
+			propGenerales.suelo.escalaSprite = canvas.width  / ( window.innerWidth * proporcion )
+
+			propGenerales.flor.escalaSprite = canvas.width * .22 / ( window.innerWidth * proporcion )
+
+
+			propGenerales.flor.florRoja.posicionX[0].x = (227 / 1920) * canvas.width
+			propGenerales.flor.florRoja.posicionX[1].x = ((1708 / 1920) * canvas.width) - (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260
+
+			propGenerales.flor.florAmarilla.posicionX[0].x = ((227 / 1920) * canvas.width) + (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260
+			propGenerales.flor.florAmarilla.posicionX[1].x = ((1708 / 1920) * canvas.width) - (canvas.width * .22  / ( window.innerWidth * proporcion )) * 260 * 2
+
+			propGenerales.cerca.escalaSprite = canvas.width / ( window.innerWidth * proporcion )
+
+			propGenerales.nubeGrande.escalaSprite = canvas.width  / ( window.innerWidth * proporcion )
+			propGenerales.nubePequeña.escalaSprite = canvas.width  / ( window.innerWidth * proporcion )
+
+
+			instanciarObjetos()
+		}
+	})
+
+
+	window.addEventListener("orientationchange", resize)
+
+	// document.addEventListener('touchstart', (e)=> {
+	// 	e.preventDefault()
+	// })
+
+	// document.addEventListener('click', (e) => {
+	// 	e.preventDefault()
+	// })
+	
+	// document.addEventListener('pointerdown', (e) => {
+	
+	// 	e.preventDefault()
+
+	// 	console.log(e);
+
+
+	// })
+
+	// document.addEventListener('touchend', (e) => {
+	// 	e.preventDefault();
+	// })
+	// document.addEventListener('touchmove', (e) => {
+	// 	e.preventDefault();
+	// })
+
+	// document.addEventListener('pointermove', (e) => {
+	// 	e.preventDefault();
+	// })
+
+	// document.addEventListener('pointerup', (e) => {
+	// 	e.preventDefault()
+	// })
+
+	
 	
 	
 }
 
-let x= 0;
-let y = 0;
-
-document.addEventListener('pointerdown', (e) => {
-	alert(e.pointerType);
-	x = e.clientX;
-})
-
-document.addEventListener("pointermove", (e) => {
-	e.preventDefault();
-})
-
-document.addEventListener("pointerup", (e) => {
-	let x2 = e.clientX;
-
-	
-
-	if(x2 - x > 0) {
-		alert('derecha')
-	}else {
-		alert('izquierda')
-	}
-
-})

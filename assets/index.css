@@ -10,6 +10,7 @@ body {
     width: 100%;
     min-height: 100vh;
     cursor: url('./img/cursor_64.png'), pointer;
+    /* overflow: hidden; */
 }
 
 .container 
@@ -19,7 +20,9 @@ body {
     display: flex;
 }
 
+
 canvas {
+    /* display: flex; */
     background-image: url('./img/fondo.png');
     background-size: cover;
     background-position: bottom center;
@@ -29,11 +32,10 @@ canvas {
     object-fit: cover;
     object-position: bottom center;
 
-
     touch-action: manipulation;
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none;
+    -ms-user-select: none; 
 }
