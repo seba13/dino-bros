@@ -9,7 +9,7 @@
 body {
     width: 100%;
     min-height: 100vh;
-    cursor: url('./img/cursor_64.png'), pointer;
+    cursor: url('./img/cursor_64.png'), default;
     /* overflow: hidden; */
 }
 
@@ -21,8 +21,20 @@ body {
 }
 
 
+.boton-saltar {
+    position : fixed;
+	top : 50%;
+	left : 75%;
+	background-color: white;  
+	padding : 1rem;
+	border-radius : 50%;
+	opacity : .4;
+    user-select: none;
+}
+
 canvas {
     /* display: flex; */
+    
     background-image: url('./img/fondo.png');
     background-size: cover;
     background-position: bottom center;
@@ -31,11 +43,5 @@ canvas {
     width: 100%;
     object-fit: cover;
     object-position: bottom center;
-
-    touch-action: manipulation;
-    user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none; 
+    
 }

@@ -14,7 +14,7 @@
 // REINICIAR JUEGO
 
 const canvas = document.querySelector('canvas');
-
+const containerCanvas = document.querySelector('.container')
 let ctx ;
 
 
@@ -277,12 +277,22 @@ window.addEventListener("load", (e) => {
 
 	if(esDispositivoMovil()) {
 
-		proporcion = 1.8
+		if(window.innerWidth > window.innerHeight) {
+
+			proporcion = 657 * 1.6 / window.innerWidth
+		}else {
+			proporcion = 657 * 1.7 / window.innerHeight
+
+		}
+
 		document.addEventListener("pointerdown", (e) => {
 
 		
-			if (canvas.requestFullscreen) {
-				canvas.requestFullscreen();
+			if (containerCanvas.requestFullscreen && !document.fullscreenElement) {
+				containerCanvas.requestFullscreen();
+				setTimeout(() => {
+					window.scrollTo(0, document.body.scrollHeight)
+				}, 1);
 			  }
 
 		})
@@ -474,34 +484,29 @@ function iniciar() {
 	});
 
 
+	
+	
+
 	function resize(e) {
 	
-		// 1920/973 => 1.1
-		// width/height => x
-		if(screen.orientation.angle % 90 === 0) {
-
-			canvas.width = window.innerHeight
-			canvas.height = window.innerWidth
-		}else {
-			canvas.width = window.innerWidth
-			canvas.height = window.innerHeight
-		}
-
-		instanciarObjetos()
-	}
-
-	
-
-	
-	window.addEventListener('resize', () => {
-
 		if(!esDispositivoMovil()) {
-			canvas.width = window.innerWidth
-			canvas.height = window.innerHeight
-
 			proporcion = 1920 * .9 / window.innerWidth 
+		}
+		else {
+			if(window.innerWidth > window.innerHeight) {
 
-			propGenerales.mario.escalaSprite = canvas.width * .3 / ( window.innerWidth * proporcion )
+				proporcion = 657 * 1.6 / window.innerWidth
+			}else {
+				proporcion = 657 * 1.7 / window.innerHeight
+	
+			}
+		}
+		canvas.width = window.innerWidth
+		canvas.height = window.innerHeight
+
+		
+
+		propGenerales.mario.escalaSprite = canvas.width * .3 / ( window.innerWidth * proporcion )
 
 			propGenerales.cesped.escalaSprite = canvas.width  / ( window.innerWidth * proporcion )
 
@@ -523,43 +528,75 @@ function iniciar() {
 
 
 			instanciarObjetos()
-		}
-	})
+	}
 
-
-	window.addEventListener("orientationchange", resize)
-
-	// document.addEventListener('touchstart', (e)=> {
-	// 	e.preventDefault()
-	// })
-
-	// document.addEventListener('click', (e) => {
-	// 	e.preventDefault()
-	// })
 	
-	// document.addEventListener('pointerdown', (e) => {
 	
-	// 	e.preventDefault()
 
-	// 	console.log(e);
+	
+	window.addEventListener('resize', resize)
 
 
-	// })
+	if(esDispositivoMovil()) {
 
-	// document.addEventListener('touchend', (e) => {
-	// 	e.preventDefault();
-	// })
-	// document.addEventListener('touchmove', (e) => {
-	// 	e.preventDefault();
-	// })
+		let posXInicial
+		let posYInicial
+		let posXFinal
+		let posYFinal
+		let moviendo = false
 
-	// document.addEventListener('pointermove', (e) => {
-	// 	e.preventDefault();
-	// })
 
-	// document.addEventListener('pointerup', (e) => {
-	// 	e.preventDefault()
-	// })
+		
+		let btn = document.createElement('div')
+		btn.classList.add('boton-saltar')
+		btn.textContent = "saltar"
+		containerCanvas.appendChild(btn)
+
+		btn.addEventListener('pointerdown', () => {
+			propGenerales.teclas.ArrowUp.presionada = true;
+				mario.ultimaTeclaPresiona = 'ArrowUp';
+
+				setTimeout(() => {
+					propGenerales.teclas.ArrowUp.presionada = false;
+				}, 100);
+		})
+
+		window.addEventListener("orientationchange", resize)
+
+		window.addEventListener('pointerdown', (e) => {
+			
+			posXInicial = e.clientX
+			posYInicial = e.clientY
+
+			if(e.target !== btn) {
+				if(e.clientX <= canvas.width*.15) {
+					console.log("izquierda")
+	
+					propGenerales.teclas.ArrowLeft.presionada = true;
+					mario.ultimaTeclaPresiona = 'ArrowLeft';
+				} else 
+				if(e.clientX >= canvas.width * .85) {
+					console.log("derecha")
+					propGenerales.teclas.ArrowRight.presionada = true;
+					mario.ultimaTeclaPresiona = 'ArrowRight';
+				}
+			}
+			
+		})
+
+		window.addEventListener('pointerup', e => {
+			
+			if(e.clientX <= canvas.width*.15) {
+				propGenerales.teclas.ArrowLeft.presionada = false;
+			} else 
+			if(e.clientX >= canvas.width * .85) {
+				propGenerales.teclas.ArrowRight.presionada = false;
+			}
+			
+		})
+
+
+	}
 
 	
 	
