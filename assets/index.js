@@ -1,17 +1,21 @@
 // TEMAS POR VER:
 
-// resize de navegador
-// ajuste de fondo a distintas resoluciones
+// resize de navegador ✅
+// ajuste de fondo a distintas resoluciones ✅
 
-// IMPLEMENTAR CLASES
-// FÍSICAS DE SALTO
-// VELOCIDAD CONSTANTE DEL PERSONAJE
-// APARICIÓN DE ENEMIGOS
-// PINTAR ELEMENTOS PAISAJE
-// LÓGICA DE PUNTAJE
-// MÚSICA
-// COLISIONES CON ENEMIGOS
-// REINICIAR JUEGO
+// IMPLEMENTAR CLASES ✅
+// FÍSICAS DE SALTO ✅
+    // ---> MEJORAR ACCIONES DE SALTO CON DIRECCION (SALTAR IZQUIERDA / SALTAR DERECHA) ⭕
+
+// VELOCIDAD CONSTANTE DEL PERSONAJE ✅
+	// ---> AJUSTAR VELOCIDAD PERSONAJE EN DISPOSITIVOS MOBILES ⭕
+// APARICIÓN DE ENEMIGOS ⭕
+// PINTAR ELEMENTOS PAISAJE ✅
+	
+// LÓGICA DE PUNTAJE ⭕
+// MÚSICA ⭕
+// COLISIONES CON ENEMIGOS ⭕
+// INICIO / TERMINO / REINICIO DE JUEGO ⭕
 
 const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container')
@@ -55,7 +59,7 @@ function instanciarObjetos() {
             y: 0,
         },
         rutaImagen: './assets/img/sprites-mario-inactivo-derecha-2.png',
-        contadorLimiteCuadros: 5,
+        contadorLimiteCuadros: 16,
         maximosCuadros: 12,
         escalaSprite: propGenerales.mario.escalaSprite,
         gravedad: 1,
@@ -391,7 +395,7 @@ window.addEventListener("load", (e) => {
                 },
             ],
         },
-        gravedad: .8,
+        gravedad: .5,
         teclas: {
             ArrowLeft: {
                 presionada: false,

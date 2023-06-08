@@ -10,7 +10,7 @@ class Sprite{
      * @param {number} escalaSprite 
      * @param {string[]} sprites 
      */
-     constructor({posicion, velocidad, rutaImagen, maximosCuadros, offset = {x: 0, y : 0},contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined}){
+     constructor({posicion, velocidad, rutaImagen, maximosCuadros, offset = {x: 0, y : 0}, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined}){
          
          this.posicion = posicion;
          this.velocidad = velocidad;
@@ -137,9 +137,14 @@ class Sprite{
                      // if(this.posicion.x + 10 + (this.imagen.width/this.maximosCuadros * this.escalaSprite )< canvas.width){
                      //     this.posicion.x +=10
                      // }
+
+                    //  1920 => 10
+                    //  980 =>
+
+
                  }
                  this.ultimaDireccion = 'derecha';
-                 this.velocidad.x = 10
+                 this.velocidad.x = (canvas.width * 3 / 1920)
              }
             else if(this.ultimaTeclaPresiona === accion && propGenerales.teclas.ArrowLeft.presionada){
  
@@ -154,7 +159,8 @@ class Sprite{
                      //     this.posicion.x -=10
                      // }
                  }
-                 this.velocidad.x = -10
+                 this.velocidad.x = (canvas.width * -3 / 1920)
+                //  console.log(this.velocidad.x);
                  this.ultimaDireccion = 'izquierda'
              }
              else if(this.ultimaTeclaPresiona === accion && propGenerales.teclas.ArrowUp.presionada){
@@ -167,7 +173,7 @@ class Sprite{
                          this.maximosCuadros = this.sprites['saltandoDerecha'].maximosCuadros
                          this.cuadroActual = 0;
                          if(this.velocidad.y  == 0) {
-                             this.velocidad.y -= 20
+                             this.velocidad.y -=  (canvas.height * 20 / 973)
                          }
                      }
                  }
@@ -177,7 +183,7 @@ class Sprite{
                          this.maximosCuadros = this.sprites['saltandoIzquierda'].maximosCuadros
                          this.cuadroActual = 0;
                          if(this.velocidad.y ==  0) {
-                             this.velocidad.y -= 20
+                             this.velocidad.y -= (canvas.height * 20 / 973)
                          }
                      }
                  }
@@ -273,7 +279,7 @@ class Sprite{
      }
  
      animarSprite() {
-         this.posicion.x-=1
+         this.posicion.x-= canvas.width / 1920
  
          if(this.posicion.x + this.imagen.width * this.escalaSprite < 0) {
              this.posicion.x = canvas.width - propGenerales.nubePequeña.ancho + Math.floor(Math.random() * 601) + Math.floor((Math.random() * 1200) + 100);
