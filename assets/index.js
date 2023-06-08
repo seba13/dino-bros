@@ -5,7 +5,7 @@
 
 // IMPLEMENTAR CLASES ✅
 // FÍSICAS DE SALTO ✅
-// ---> MEJORAR ACCIONES DE SALTO CON DIRECCION (SALTAR IZQUIERDA / SALTAR DERECHA) ⭕
+// ---> MEJORAR ACCIONES DE SALTO CON DIRECCION (SALTAR IZQUIERDA / SALTAR DERECHA) (EN PROCESO)🛑
 
 // VELOCIDAD CONSTANTE DEL PERSONAJE ✅
 // ---> AJUSTAR VELOCIDAD PERSONAJE EN DISPOSITIVOS MOBILES ⭕
@@ -22,11 +22,8 @@
 const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container');
 let proporcion = (1920 * 0.9) / window.innerWidth;
-let ctx;
-
-let propGenerales;
-
-let mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
+const ctx = canvas.getContext('2d');
+let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
 
 
 window.addEventListener('load', (e) => {
@@ -51,7 +48,7 @@ window.addEventListener('load', (e) => {
 	}
 
 
-	ctx = canvas.getContext('2d');
+	
 
 	propGenerales = {
 		mario: {
@@ -156,7 +153,7 @@ window.addEventListener('load', (e) => {
 				},
 			],
 		},
-		gravedad: 0.5,
+		gravedad: 0.4,
 		teclas: {
 			ArrowLeft: {
 				presionada: false,

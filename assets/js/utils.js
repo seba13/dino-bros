@@ -106,7 +106,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 0,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.nubeGrande.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	}
@@ -128,7 +128,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.cesped.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	});
@@ -149,7 +149,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.suelo.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 		suelos.push(
@@ -166,7 +166,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.suelo.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	}
@@ -189,7 +189,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.cerca.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	});
@@ -213,7 +213,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.flor.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	});
@@ -233,7 +233,7 @@ function instanciarObjetos() {
 				contadorLimiteCuadros: 1,
 				maximosCuadros: 1,
 				escalaSprite: propGenerales.flor.escalaSprite,
-				gravedad: 1,
+				gravedad: 0,
 			}),
 		);
 	});
