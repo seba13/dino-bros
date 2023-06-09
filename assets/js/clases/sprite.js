@@ -9,6 +9,7 @@ class Sprite {
 	 * @param {string[]} sprites
 	 */
 	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, offset = { x: 0, y: 0 }, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
+		this.muerto = false
 		this.posicion = posicion;
 		this.velocidad = velocidad;
 		this.imagen = document.createElement('img');
@@ -85,14 +86,14 @@ class Sprite {
 		// 		y: this.posicion.y,
 		// 	};
 
-		ctx.fillStyle = 'rgba(0,0,0,.6)';
-		// ctx.fillRect(10, 10, 100, 100);
+		// ctx.fillStyle = 'rgba(0,0,0,.6)';
+	
 
 		if (this.nombreSprite == 'mario') {
 			console.log(this.rectanguloColision);
 		}
 
-		ctx.fillRect(this.rectanguloColision.x, this.rectanguloColision.y, this.rectanguloColision.ancho, this.rectanguloColision.alto);
+		// ctx.fillRect(this.rectanguloColision.x, this.rectanguloColision.y, this.rectanguloColision.ancho, this.rectanguloColision.alto);
 	}
 
 	animarSprite() {
@@ -103,7 +104,13 @@ class Sprite {
 			if (this.cuadroActual < this.maximosCuadros - 1) {
 				this.cuadroActual++;
 			} else {
-				this.cuadroActual = 0;
+				if(this.imagen){
+					if(this.sprites ){
+						if(this.sprites['muerto'].imagen != this.imagen){
+							this.cuadroActual = 0;
+						}
+					}
+				}
 			}
 		}
 
@@ -120,7 +127,7 @@ class Sprite {
 			this.posicion.x += this.velocidad.x;
 			this.velocidad.y += propGenerales.gravedad;
 
-			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite) {
+			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite ) {
 				this.posicion.y += this.velocidad.y;
 			} else {
 				// if (this.condicion == 0) {
@@ -130,8 +137,17 @@ class Sprite {
 				// 	console.log({ 'coordenada suelo posY': this.deltaSueloSprite });
 				// }
 
-				this.posicion.y = this.deltaSueloSprite;
-				this.velocidad.y = 0;
+				if(!this.muerto) {
+					console.log("no muerto");
+					this.posicion.y = this.deltaSueloSprite;
+					this.velocidad.y = 0;
+				}
+				else {
+					this.velocidad.y = this.velocidad.y 
+					
+					
+					this.posicion.y += this.velocidad.y *.05
+				}
 			}
 
 			// aparicion personaje por el otro extremo
@@ -154,8 +170,8 @@ class Sprite {
 		if (this.sprites) {
 			this.coordenadaSalto = 15 - canvas.width / 1920;
 
-			console.log(this.coordenadaSalto);
-			if (propGenerales.teclas.ArrowUp.presionada && !this.bloquearSalto) {
+			console.log({coordenadaSalto: this.coordenadaSalto});
+			if (propGenerales.teclas.ArrowUp.presionada && !this.bloquearSalto && !this.muerto) {
 				this.bloquearSalto = true;
 
 				if (this.posicion.y + this.velocidad.y > this.deltaSueloSprite - this.coordenadaSalto) {
@@ -165,14 +181,14 @@ class Sprite {
 					this.velocidad.y = -this.coordenadaSalto;
 				}
 			}
-			if (Math.floor(this.posicion.y) != this.deltaSueloSprite) {
+			if (Math.floor(this.posicion.y) != this.deltaSueloSprite  && !this.muerto) {
 				if (this.ultimaDireccion === 'derecha') {
 					if (this.imagen != this.sprites['saltandoDerecha'].imagen) {
 						this.imagen = this.sprites['saltandoDerecha'].imagen;
 						this.maximosCuadros = this.sprites['saltandoDerecha'].maximosCuadros;
 						this.cuadroActual = 0;
 					}
-				} else if (this.ultimaDireccion === 'izquierda') {
+				} else if (this.ultimaDireccion === 'izquierda' && !this.muerto) {
 					if (this.imagen != this.sprites['saltandoIzquierda'].imagen) {
 						this.imagen = this.sprites['saltandoIzquierda'].imagen;
 						this.maximosCuadros = this.sprites['saltandoIzquierda'].maximosCuadros;
@@ -180,7 +196,7 @@ class Sprite {
 					}
 				}
 			}
-			if (propGenerales.teclas.ArrowLeft.presionada) {
+			if (propGenerales.teclas.ArrowLeft.presionada && !this.muerto) {
 				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
 					if (this.imagen != this.sprites['caminandoIzquierda'].imagen) {
 						this.imagen = this.sprites['caminandoIzquierda'].imagen;
@@ -191,7 +207,7 @@ class Sprite {
 
 				this.velocidad.x = -5;
 				this.ultimaDireccion = 'izquierda';
-			} else if (propGenerales.teclas.ArrowRight.presionada) {
+			} else if (propGenerales.teclas.ArrowRight.presionada && !this.muerto) {
 				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
 					if (this.imagen != this.sprites['caminandoDerecha'].imagen) {
 						this.imagen = this.sprites['caminandoDerecha'].imagen;
@@ -201,7 +217,23 @@ class Sprite {
 				}
 				this.ultimaDireccion = 'derecha';
 				this.velocidad.x = 5;
-			} else {
+			} else
+			if(this.muerto ) {
+				this.bloquearSalto = true
+				if (this.imagen != this.sprites['muerto'].imagen) {
+					this.imagen = this.sprites['muerto'].imagen;
+					this.maximosCuadros = this.sprites['muerto'].maximosCuadros;
+					this.cuadroActual = 0;
+					if(!this.bloquearSalto) {
+						this.bloquearSalto = true
+					
+					}
+				}
+					this.velocidad.x = 0
+				
+				
+			}
+			else {
 				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
 					if (this.ultimaDireccion === 'derecha') {
 						if (this.imagen != this.sprites['inactivoDerecha'].imagen) {
@@ -360,4 +392,67 @@ class Animable extends Sprite {
 			this.posicion.y = Math.floor(Math.random() * 250);
 		}
 	}
+}
+
+
+class Enemigo extends Sprite {
+
+	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
+		super({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite, gravedad, sprites });
+	}
+
+
+	animarSprite() {
+		this.contadorCuadros++;
+		this.velocidad.x = -1
+		// cambia de un cuadro a otro
+		if (this.contadorCuadros % this.contadorLimiteCuadros === 0) {
+			if (this.cuadroActual < this.maximosCuadros - 1) {
+				this.cuadroActual++;
+			} else {
+				this.cuadroActual = 0;
+			}
+		}
+
+		// mover sprite en canvas
+		// aplica gravedad solo a los que tenga gravedad 1
+		if (this.gravedad === 1) {
+			// if(this.posicion.y + this.velocidad.y - 2 +  this.imagen.height  * this.escalaSprite < this.deltaSueloSprite) {
+			//     this.velocidad.y += 1
+			//     this.posicion.y += this.velocidad.y
+			// } else {
+			//     this.velocidad.y = 0
+			// }
+
+			this.posicion.x += this.velocidad.x;
+			this.velocidad.y += propGenerales.gravedad;
+
+			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite) {
+				this.posicion.y += this.velocidad.y;
+			} else {
+				// if (this.condicion == 0) {
+				// 	this.condicion = 1;
+
+				// 	canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite;
+				// 	console.log({ 'coordenada suelo posY': this.deltaSueloSprite });
+				// }
+
+				this.posicion.y = this.deltaSueloSprite;
+				this.velocidad.y = 0;
+			}
+
+			// aparicion personaje por el otro extremo
+
+			if (this.posicion.x < -this.imagen.width * this.escalaSprite) {
+				console.log('entra aca');
+				this.posicion.x = canvas.width;
+				console.log(this.posicion.x);
+			}
+			if (this.posicion.x > canvas.width) {
+				this.posicion.x = -this.imagen.width * this.escalaSprite;
+			}
+		}
+		
+	}
+
 }

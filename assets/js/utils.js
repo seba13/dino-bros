@@ -2,6 +2,8 @@ function esDispositivoMovil() {
 	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
+let idAnimation;
+
 function instanciarObjetos() {
 	fondo = new Sprite({
 		posicion: {
@@ -36,7 +38,7 @@ function instanciarObjetos() {
 		gravedad: 1,
 		offset: {
 			x: 35,
-			y: 15,
+			y: 45,
 		},
 		sprites: {
 			inactivoIzquierda: {
@@ -62,6 +64,10 @@ function instanciarObjetos() {
 			saltandoIzquierda: {
 				rutaImagen: './assets/img/sprites-mario-saltando-izquierda-2.png',
 				maximosCuadros: '1',
+			},
+			muerto: {
+				rutaImagen: './assets/img/sprite-mario-colision.png',
+				maximosCuadros: 1,
 			},
 		},
 	});
@@ -233,7 +239,7 @@ function instanciarObjetos() {
 		);
 	});
 
-	goomba = new Sprite({
+	goomba = new Enemigo({
 		posicion: {
 			x: canvas.width / 1.2,
 			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
@@ -252,13 +258,11 @@ function instanciarObjetos() {
 			x: 0,
 			y: 10,
 		},
-	
-	});	
+	});
 }
 
-
-
 function iniciar() {
+	propGenerales.gameOver = false;
 	instanciarObjetos();
 
 	animar();
@@ -307,11 +311,11 @@ function iniciar() {
 
 		mario.actualizarSprite();
 
+		detectarColision(mario, goomba);
 
-		detectarColision(mario, goomba)
-
-		requestAnimationFrame(animar);
-
+		if (!propGenerales.gameOver) {
+			idAnimation = requestAnimationFrame(animar);
+		} 
 	}
 
 	document.addEventListener('keydown', (e) => {
@@ -327,6 +331,10 @@ function iniciar() {
 			propGenerales.teclas.ArrowUp.presionada = true;
 			// mario.bloquearSalto = true
 			mario.ultimaTeclaPresionada = 'ArrowUp';
+
+			if(!mario.bloquearSalto && !mario.muerto) {
+				audioSalto.play()
+			}
 		}
 	});
 
@@ -343,31 +351,36 @@ function iniciar() {
 		}
 	});
 
-
-
 	function detectarColision(mario, enemigo) {
 		// if(mario.posicion.x + ( (mario.imagen.width / mario.maximosCuadros) - mario.offset.x) * mario.escalaSprite  >= goomba.posicion.x && mario.posicion.x + mario.offset.x <= enemigo.posicion.x + (enemigo.imagen.width / enemigo.maximosCuadros) * enemigo.escalaSprite) {
-			
+
 		// 	if(mario.posicion.y +  (mario.imagen.height) * mario.escalaSprite - mario.offset.y >= enemigo.posicion.y) {
 
 		// 		alert("colision")
 		// 	}
-			
+
 		// }
 
-		if( (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x) && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho){
+		if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
+			if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
+				if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
+					audioFondo.pause()
+					audioGameOver.play()
+					
+					mario.muerto = true;
+					mario.cambiarSprite('muerto');
 
-			if(enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width){
-				if(mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
-
-					alert('colision')
+					
+					// audioFondo.pause()
+					setTimeout(() => {
+						cancelAnimationFrame(idAnimation);
+						propGenerales.gameOver = true;
+						// definirPropGenerales();
+						// iniciar();
+					}, 3000);
 				}
 			}
-			
-
 		}
-
-
 	}
 
 	function resize(e) {
@@ -435,8 +448,7 @@ function iniciar() {
 		propGenerales.nubeGrande.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 		propGenerales.nubePequeña.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 
-		propGenerales.goomba.escalaSprite =  (canvas.width) * .7 / (window.innerWidth * proporcion)
-
+		propGenerales.goomba.escalaSprite = (canvas.width * 0.7) / (window.innerWidth * proporcion);
 	}
 
 	window.addEventListener('resize', resize);
@@ -457,6 +469,9 @@ function iniciar() {
 			propGenerales.teclas.ArrowUp.presionada = true;
 			mario.ultimaTeclaPresionada = 'ArrowUp';
 
+			if(!mario.bloquearSalto && !mario.muerto) {
+				audioSalto.play()
+			}
 			setTimeout(() => {
 				propGenerales.teclas.ArrowUp.presionada = false;
 				mario.bloquearSalto = false;
