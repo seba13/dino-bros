@@ -1,11 +1,6 @@
-
-
-
-
 function esDispositivoMovil() {
 	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
-
 
 function instanciarObjetos() {
 	fondo = new Sprite({
@@ -239,7 +234,6 @@ function instanciarObjetos() {
 	});
 }
 
-
 function iniciar() {
 	instanciarObjetos();
 
@@ -293,15 +287,16 @@ function iniciar() {
 	document.addEventListener('keydown', (e) => {
 		if (e.key === 'ArrowLeft') {
 			propGenerales.teclas.ArrowLeft.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowLeft';
+			mario.ultimaTeclaPresionada = 'ArrowLeft';
 		}
 		if (e.key === 'ArrowRight') {
 			propGenerales.teclas.ArrowRight.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowRight';
+			mario.ultimaTeclaPresionada = 'ArrowRight';
 		}
-		if (e.key === 'ArrowUp') {
+		if (e.key === 'ArrowUp' || e.key === ' ') {
 			propGenerales.teclas.ArrowUp.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowUp';
+			// mario.bloquearSalto = true
+			mario.ultimaTeclaPresionada = 'ArrowUp';
 		}
 	});
 
@@ -312,8 +307,9 @@ function iniciar() {
 		if (e.key === 'ArrowRight') {
 			propGenerales.teclas.ArrowRight.presionada = false;
 		}
-		if (e.key === 'ArrowUp') {
+		if (e.key === 'ArrowUp' || e.key === ' ') {
 			propGenerales.teclas.ArrowUp.presionada = false;
+			mario.bloquearSalto = false;
 		}
 	});
 
