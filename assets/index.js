@@ -23,7 +23,7 @@ const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container');
 let proporcion = (1920 * 0.9) / window.innerWidth;
 const ctx = canvas.getContext('2d');
-let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes;
+let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba;
 
 
 window.addEventListener('load', (e) => {
@@ -165,7 +165,13 @@ window.addEventListener('load', (e) => {
 				presionada: false,
 			},
 		},
+		goomba: {
+			escalaSprite: (canvas.width) * .7 / (window.innerWidth * proporcion),
+			ancho: 468,
+			alto: 155,
+		},
 	};
+	
 	
 	iniciar();
 });

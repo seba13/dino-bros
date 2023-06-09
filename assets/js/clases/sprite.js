@@ -25,19 +25,39 @@ class Sprite {
 		this.bloquearSalto = false;
 		this.ultimaDireccion = 'derecha';
 		this.coordenadaSalto = this.posicion.y + this.offset.y + this.velocidad.y + this.imagen.height * this.escalaSprite;
+		this.rectanguloColision = {};
 
+		// this.rectanguloColision = {
+		// 	ancho: (this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7,
+		// 	alto: this.imagen.height * this.escalaSprite,
+		// 	x: this.posicion.x + ((this.imagen.width / this.maximosCuadros) * this.escalaSprite) / 2 - ((this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7) / 2,
+		// 	y: this.posicion.y + (this.imagen.height * this.escalaSprite) / 2 - (this.imagen.height * this.escalaSprite) / 2,
+		// };
 
 		// console.log(`canvas.height:${canvas.height} + propGenerales.suelo.alto:${propGenerales.suelo.alto} * propGenerales.suelo.escalaSprite:${propGenerales.suelo.escalaSprite} - this.imagen.height:${this.imagen.height} * this.escalaSprite:${this.escalaSprite} === ${Math.floor(canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite)}`)
 
-		const self = this
-
+		const self = this;
 
 		// espera a que cargue la imagen para así obtener el alto de esta
-		this.imagen.addEventListener("load", function (e) {
-
+		this.imagen.addEventListener('load', function (e) {
 			self.deltaSueloSprite = Math.floor(canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - self.imagen.height * self.escalaSprite);
 
-		})
+			// self.rectanguloColision = {
+			// 	ancho: (self.imagen.width / self.maximosCuadros) * self.escalaSprite * 0.7,
+			// 	alto: self.imagen.height * self.escalaSprite,
+			// 	x: self.posicion.x + ((self.imagen.width / self.maximosCuadros) * self.escalaSprite) / 2 - ((self.imagen.width / self.maximosCuadros) * self.escalaSprite * 0.7) / 2,
+			// 	y: self.posicion.y,
+			// };
+
+			// self.rectanguloColision = {
+			// 	ancho: (self.imagen.width / self.maximosCuadros) * self.escalaSprite * 0.7,
+			// 	alto: self.imagen.height * self.escalaSprite,
+			// 	x: self.posicion.x + ((self.imagen.width / self.maximosCuadros) * self.escalaSprite) / 2 - ((self.imagen.width / self.maximosCuadros) * self.escalaSprite * 0.7) / 2,
+			// 	y: self.posicion.y,
+			// };
+
+			// console.log({imagenwidth: self.imagen.width});
+		});
 
 		for (const sprite in sprites) {
 			this.sprites[sprite].imagen = document.createElement('img');
@@ -53,10 +73,26 @@ class Sprite {
 			this.imagen.width / this.maximosCuadros,
 			this.imagen.height,
 			this.posicion.x,
-			this.posicion.y + this.offset.y,
+			this.posicion.y + this.offset.y * this.escalaSprite,
 			(this.imagen.width / this.maximosCuadros) * this.escalaSprite,
 			this.imagen.height * this.escalaSprite,
 		);
+
+		// this.rectanguloColision = {
+		// 		ancho: (this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7,
+		// 		alto: this.imagen.height * this.escalaSprite,
+		// 		x: this.posicion.x + ((this.imagen.width / this.maximosCuadros) * this.escalaSprite) / 2 - ((this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7) / 2,
+		// 		y: this.posicion.y,
+		// 	};
+
+		ctx.fillStyle = 'rgba(0,0,0,.6)';
+		// ctx.fillRect(10, 10, 100, 100);
+
+		if (this.nombreSprite == 'mario') {
+			console.log(this.rectanguloColision);
+		}
+
+		ctx.fillRect(this.rectanguloColision.x, this.rectanguloColision.y, this.rectanguloColision.ancho, this.rectanguloColision.alto);
 	}
 
 	animarSprite() {
@@ -80,31 +116,25 @@ class Sprite {
 			// } else {
 			//     this.velocidad.y = 0
 			// }
-			
 
 			this.posicion.x += this.velocidad.x;
 			this.velocidad.y += propGenerales.gravedad;
 
+			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite) {
+				this.posicion.y += this.velocidad.y;
+			} else {
+				// if (this.condicion == 0) {
+				// 	this.condicion = 1;
 
-            if(this.posicion.y + this.velocidad.y < this.deltaSueloSprite) {
-                this.posicion.y += this.velocidad.y;
-            }else {
+				// 	canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite;
+				// 	console.log({ 'coordenada suelo posY': this.deltaSueloSprite });
+				// }
 
-				if(this.condicion == 0) {
-					this.condicion = 1
+				this.posicion.y = this.deltaSueloSprite;
+				this.velocidad.y = 0;
+			}
 
-					
-					canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - this.imagen.height * this.escalaSprite;
-					console.log({"coordenada suelo posY" :this.deltaSueloSprite});
-				}
-
-
-                this.posicion.y = this.deltaSueloSprite
-                this.velocidad.y = 0
-            }
-
-
-            // aparicion personaje por el otro extremo
+			// aparicion personaje por el otro extremo
 
 			if (this.posicion.x < -this.imagen.width * this.escalaSprite) {
 				console.log('entra aca');
@@ -122,111 +152,73 @@ class Sprite {
 
 	cambiarSprite(accion) {
 		if (this.sprites) {
-			// define la posición actual cuando salta el personaje
-			this.coordenadaSalto = Math.floor(this.posicion.y + this.velocidad.y);
+			this.coordenadaSalto = 15 - canvas.width / 1920;
 
-			
-			if(propGenerales.teclas.ArrowUp.presionada  && !this.bloquearSalto) {
-				this.bloquearSalto = true
-				console.log({salto: this.deltaSueloSprite + this.velocidad.y });
+			console.log(this.coordenadaSalto);
+			if (propGenerales.teclas.ArrowUp.presionada && !this.bloquearSalto) {
+				this.bloquearSalto = true;
 
-				if(this.posicion.y + this.velocidad.y > this.deltaSueloSprite - 15) {
+				if (this.posicion.y + this.velocidad.y > this.deltaSueloSprite - this.coordenadaSalto) {
+					// 1920x769 => -15
+					// 800x796 =>
 
-					this.velocidad.y = -15
+					this.velocidad.y = -this.coordenadaSalto;
 				}
-
 			}
-			if(Math.floor(this.posicion.y) != this.deltaSueloSprite) {
-
-			
-				if(this.ultimaDireccion === 'derecha'){
-					if(this.imagen != this.sprites['saltandoDerecha'].imagen) {
-						this.imagen = this.sprites['saltandoDerecha'].imagen
-						this.maximosCuadros = this.sprites['saltandoDerecha'].maximosCuadros
-						this.cuadroActual = 0
+			if (Math.floor(this.posicion.y) != this.deltaSueloSprite) {
+				if (this.ultimaDireccion === 'derecha') {
+					if (this.imagen != this.sprites['saltandoDerecha'].imagen) {
+						this.imagen = this.sprites['saltandoDerecha'].imagen;
+						this.maximosCuadros = this.sprites['saltandoDerecha'].maximosCuadros;
+						this.cuadroActual = 0;
 					}
-				}else 
-				if(this.ultimaDireccion === 'izquierda') {
-					if(this.imagen != this.sprites['saltandoIzquierda'].imagen) {
-						this.imagen = this.sprites['saltandoIzquierda'].imagen
-						this.maximosCuadros = this.sprites['saltandoIzquierda'].maximosCuadros
-						this.cuadroActual = 0
+				} else if (this.ultimaDireccion === 'izquierda') {
+					if (this.imagen != this.sprites['saltandoIzquierda'].imagen) {
+						this.imagen = this.sprites['saltandoIzquierda'].imagen;
+						this.maximosCuadros = this.sprites['saltandoIzquierda'].maximosCuadros;
+						this.cuadroActual = 0;
 					}
 				}
 			}
-			if(propGenerales.teclas.ArrowLeft.presionada) {
-
-				if(Math.floor(this.posicion.y) === this.deltaSueloSprite) {
-					if(this.imagen != this.sprites['caminandoIzquierda'].imagen) {
-
-						this.imagen = this.sprites['caminandoIzquierda'].imagen
-						this.maximosCuadros = this.sprites['caminandoIzquierda'].maximosCuadros
-						this.cuadroActual = 0
+			if (propGenerales.teclas.ArrowLeft.presionada) {
+				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
+					if (this.imagen != this.sprites['caminandoIzquierda'].imagen) {
+						this.imagen = this.sprites['caminandoIzquierda'].imagen;
+						this.maximosCuadros = this.sprites['caminandoIzquierda'].maximosCuadros;
+						this.cuadroActual = 0;
 					}
 				}
-				
-				this.velocidad.x = -5
-				this.ultimaDireccion = 'izquierda'
 
-			} else
-			if(propGenerales.teclas.ArrowRight.presionada) {
-				if(Math.floor(this.posicion.y) === this.deltaSueloSprite) {
-					if(this.imagen != this.sprites['caminandoDerecha'].imagen) {
-						this.imagen = this.sprites['caminandoDerecha'].imagen
-						this.maximosCuadros = this.sprites['caminandoDerecha'].maximosCuadros
-						this.cuadroActual = 0
+				this.velocidad.x = -5;
+				this.ultimaDireccion = 'izquierda';
+			} else if (propGenerales.teclas.ArrowRight.presionada) {
+				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
+					if (this.imagen != this.sprites['caminandoDerecha'].imagen) {
+						this.imagen = this.sprites['caminandoDerecha'].imagen;
+						this.maximosCuadros = this.sprites['caminandoDerecha'].maximosCuadros;
+						this.cuadroActual = 0;
 					}
 				}
-				this.ultimaDireccion = 'derecha'
-				this.velocidad.x = 5
-			}
-			else {
-				if(Math.floor(this.posicion.y) === this.deltaSueloSprite) {
-					if(this.ultimaDireccion === 'derecha'){
-						if(this.imagen != this.sprites['inactivoDerecha'].imagen) {
-							this.imagen = this.sprites['inactivoDerecha'].imagen
-							this.maximosCuadros = this.sprites['inactivoDerecha'].maximosCuadros
-							this.cuadroActual = 0
+				this.ultimaDireccion = 'derecha';
+				this.velocidad.x = 5;
+			} else {
+				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
+					if (this.ultimaDireccion === 'derecha') {
+						if (this.imagen != this.sprites['inactivoDerecha'].imagen) {
+							this.imagen = this.sprites['inactivoDerecha'].imagen;
+							this.maximosCuadros = this.sprites['inactivoDerecha'].maximosCuadros;
+							this.cuadroActual = 0;
 						}
-					}else 
-					if(this.ultimaDireccion === 'izquierda') {
-						if(this.imagen != this.sprites['inactivoIzquierda'].imagen) {
-							this.imagen = this.sprites['inactivoIzquierda'].imagen
-							this.maximosCuadros = this.sprites['inactivoIzquierda'].maximosCuadros
-							this.cuadroActual = 0
+					} else if (this.ultimaDireccion === 'izquierda') {
+						if (this.imagen != this.sprites['inactivoIzquierda'].imagen) {
+							this.imagen = this.sprites['inactivoIzquierda'].imagen;
+							this.maximosCuadros = this.sprites['inactivoIzquierda'].maximosCuadros;
+							this.cuadroActual = 0;
 						}
 					}
-					this.velocidad.x = 0
+					this.velocidad.x = 0;
 				}
-				
 			}
-
-
-			
-
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 			// if (this.ultimaTeclaPresiona === accion && propGenerales.teclas.ArrowRight.presionada) {
 			// 	if (this.coordenadaSalto >= this.deltaSueloSprite) {
@@ -338,10 +330,17 @@ class Sprite {
 			// 		}
 			// 	}
 			// }
-		} 
+		}
 	}
 
 	actualizarSprite() {
+		this.rectanguloColision = {
+			ancho: (this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7,
+			alto: (this.imagen.height - this.offset.y) * this.escalaSprite * 0.9,
+			x: this.posicion.x + ((this.imagen.width / this.maximosCuadros) * this.escalaSprite) / 2 - ((this.imagen.width / this.maximosCuadros) * this.escalaSprite * 0.7) / 2,
+			y: this.posicion.y + ((this.imagen.height - this.offset.y) * this.escalaSprite) / 2 - (((this.imagen.height - this.offset.y) * this.escalaSprite) / 2.5) * 0.9,
+		};
+
 		this.dibujar();
 		this.animarSprite();
 	}

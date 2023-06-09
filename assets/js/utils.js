@@ -35,8 +35,8 @@ function instanciarObjetos() {
 		escalaSprite: propGenerales.mario.escalaSprite,
 		gravedad: 1,
 		offset: {
-			x: 0,
-			y: 10,
+			x: 35,
+			y: 15,
 		},
 		sprites: {
 			inactivoIzquierda: {
@@ -56,11 +56,11 @@ function instanciarObjetos() {
 				maximosCuadros: '5',
 			},
 			saltandoDerecha: {
-				rutaImagen: './assets/img/sprites-mario-saltando-derecha.png',
+				rutaImagen: './assets/img/sprites-mario-saltando-derecha-2.png',
 				maximosCuadros: '1',
 			},
 			saltandoIzquierda: {
-				rutaImagen: './assets/img/sprites-mario-saltando-izquierda.png',
+				rutaImagen: './assets/img/sprites-mario-saltando-izquierda-2.png',
 				maximosCuadros: '1',
 			},
 		},
@@ -232,7 +232,31 @@ function instanciarObjetos() {
 			}),
 		);
 	});
+
+	goomba = new Sprite({
+		posicion: {
+			x: canvas.width / 1.2,
+			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
+			// y: 0,
+		},
+		velocidad: {
+			x: 0,
+			y: 0,
+		},
+		rutaImagen: './assets/img/sprite-goomba-3.png',
+		contadorLimiteCuadros: 25,
+		maximosCuadros: 4,
+		escalaSprite: propGenerales.goomba.escalaSprite,
+		gravedad: 1,
+		offset: {
+			x: 0,
+			y: 10,
+		},
+	
+	});	
 }
+
+
 
 function iniciar() {
 	instanciarObjetos();
@@ -279,9 +303,15 @@ function iniciar() {
 		// console.log({cerca:cerca.posicion.y});
 		// });
 
+		goomba.actualizarSprite();
+
 		mario.actualizarSprite();
 
+
+		detectarColision(mario, goomba)
+
 		requestAnimationFrame(animar);
+
 	}
 
 	document.addEventListener('keydown', (e) => {
@@ -312,6 +342,33 @@ function iniciar() {
 			mario.bloquearSalto = false;
 		}
 	});
+
+
+
+	function detectarColision(mario, enemigo) {
+		// if(mario.posicion.x + ( (mario.imagen.width / mario.maximosCuadros) - mario.offset.x) * mario.escalaSprite  >= goomba.posicion.x && mario.posicion.x + mario.offset.x <= enemigo.posicion.x + (enemigo.imagen.width / enemigo.maximosCuadros) * enemigo.escalaSprite) {
+			
+		// 	if(mario.posicion.y +  (mario.imagen.height) * mario.escalaSprite - mario.offset.y >= enemigo.posicion.y) {
+
+		// 		alert("colision")
+		// 	}
+			
+		// }
+
+		if( (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x) && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho){
+
+			if(enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width){
+				if(mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
+
+					alert('colision')
+				}
+			}
+			
+
+		}
+
+
+	}
 
 	function resize(e) {
 		if (!esDispositivoMovil()) {
@@ -365,10 +422,21 @@ function iniciar() {
 		propGenerales.cesped.posicionX[2].x = (892 / 1920) * canvas.width;
 		propGenerales.cesped.posicionX[3].x = canvas.width - canvas.width * 0.176;
 
+		nubesGrandes.forEach((nube) => {
+			nube.posicion.y = Math.floor(Math.random() * canvas.height * 0.2);
+		});
+
+		nubesPequeñas.forEach((nube) => {
+			nube.posicion.y = Math.floor(Math.random() * canvas.height * 0.2);
+		});
+
 		propGenerales.cerca.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 
 		propGenerales.nubeGrande.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 		propGenerales.nubePequeña.escalaSprite = canvas.width / (window.innerWidth * proporcion);
+
+		propGenerales.goomba.escalaSprite =  (canvas.width) * .7 / (window.innerWidth * proporcion)
+
 	}
 
 	window.addEventListener('resize', resize);
@@ -387,39 +455,61 @@ function iniciar() {
 
 		btn.addEventListener('pointerdown', () => {
 			propGenerales.teclas.ArrowUp.presionada = true;
-			mario.ultimaTeclaPresiona = 'ArrowUp';
+			mario.ultimaTeclaPresionada = 'ArrowUp';
 
 			setTimeout(() => {
 				propGenerales.teclas.ArrowUp.presionada = false;
+				mario.bloquearSalto = false;
 			}, 100);
 		});
 
-		window.addEventListener('orientationchange', resize);
+		document.addEventListener('orientationchange', resize);
 
-		window.addEventListener('pointerdown', (e) => {
+		let pointerId = 0;
+
+		canvas.addEventListener('pointerdown', (e) => {
 			posXInicial = e.clientX;
 			posYInicial = e.clientY;
 
+			// alert(e.pointerId)
+			console.log({ pointerid: e.pointerId });
 			if (e.target !== btn) {
+				pointerId = e.pointerId;
 				if (e.clientX <= canvas.width * 0.15) {
 					console.log('izquierda');
 
 					propGenerales.teclas.ArrowLeft.presionada = true;
-					mario.ultimaTeclaPresiona = 'ArrowLeft';
+					mario.ultimaTeclaPresionada = 'ArrowLeft';
 				} else if (e.clientX >= canvas.width * 0.85) {
 					console.log('derecha');
 					propGenerales.teclas.ArrowRight.presionada = true;
-					mario.ultimaTeclaPresiona = 'ArrowRight';
+					mario.ultimaTeclaPresionada = 'ArrowRight';
 				}
 			}
 		});
 
-		window.addEventListener('pointerup', (e) => {
+		canvas.addEventListener('pointermove', (e) => {
+			// if (e.clientX <= canvas.width * 0.15) {
+			// 	propGenerales.teclas.ArrowLeft.presionada = false;
+			// } else if (e.clientX >= canvas.width * 0.85) {
+			// 	propGenerales.teclas.ArrowRight.presionada = false;
+			// }
+			canvas.addEventListener('pointerleave', pointerLeave);
+			// e.preventDefault()
+		});
+
+		canvas.addEventListener('pointerup', (e) => {
 			if (e.clientX <= canvas.width * 0.15) {
 				propGenerales.teclas.ArrowLeft.presionada = false;
 			} else if (e.clientX >= canvas.width * 0.85) {
 				propGenerales.teclas.ArrowRight.presionada = false;
 			}
 		});
+
+		let pointerLeave = (e) => {
+			propGenerales.teclas.ArrowLeft.presionada = false;
+			propGenerales.teclas.ArrowRight.presionada = false;
+			canvas.removeEventListener('pointerleave', pointerLeave);
+		};
 	}
 }
