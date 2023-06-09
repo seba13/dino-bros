@@ -153,26 +153,29 @@ class Sprite {
 						this.cuadroActual = 0
 					}
 				}
-			}else
+			}
 			if(propGenerales.teclas.ArrowLeft.presionada) {
 
-				
-				if(this.imagen != this.sprites['caminandoIzquierda'].imagen) {
+				if(Math.floor(this.posicion.y) === this.deltaSueloSprite) {
+					if(this.imagen != this.sprites['caminandoIzquierda'].imagen) {
 
-					this.imagen = this.sprites['caminandoIzquierda'].imagen
-					this.maximosCuadros = this.sprites['caminandoIzquierda'].maximosCuadros
-					this.cuadroActual = 0
+						this.imagen = this.sprites['caminandoIzquierda'].imagen
+						this.maximosCuadros = this.sprites['caminandoIzquierda'].maximosCuadros
+						this.cuadroActual = 0
+					}
 				}
+				
 				this.velocidad.x = -5
 				this.ultimaDireccion = 'izquierda'
 
 			} else
 			if(propGenerales.teclas.ArrowRight.presionada) {
-
-				if(this.imagen != this.sprites['caminandoDerecha'].imagen) {
-					this.imagen = this.sprites['caminandoDerecha'].imagen
-					this.maximosCuadros = this.sprites['caminandoDerecha'].maximosCuadros
-					this.cuadroActual = 0
+				if(Math.floor(this.posicion.y) === this.deltaSueloSprite) {
+					if(this.imagen != this.sprites['caminandoDerecha'].imagen) {
+						this.imagen = this.sprites['caminandoDerecha'].imagen
+						this.maximosCuadros = this.sprites['caminandoDerecha'].maximosCuadros
+						this.cuadroActual = 0
+					}
 				}
 				this.ultimaDireccion = 'derecha'
 				this.velocidad.x = 5
