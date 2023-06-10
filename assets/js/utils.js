@@ -259,10 +259,28 @@ function instanciarObjetos() {
 			y: 10,
 		},
 	});
+
+	// botonPlay = new Sprite({
+	// 	posicion: {
+	// 		x: (canvas.width / 2)  - (propGenerales.botonPlay.ancho / 2) * propGenerales.botonPlay.escalaSprite,
+	// 		y: (canvas.height / 2)  - (propGenerales.botonPlay.alto / 2) * propGenerales.botonPlay.escalaSprite,
+	// 	},
+	// 	velocidad: {
+	// 		x: 0,
+	// 		y: 0,
+	// 	},
+	// 	contadorLimiteCuadros: 1,
+	// 	maximosCuadros: 1,
+	// 	rutaImagen: './assets/img/boton-play.png',
+	// 	escalaSprite: propGenerales.botonPlay.escalaSprite,
+	// 	gravedad: 0
+	// })
+
 }
 
 function iniciar() {
 	propGenerales.gameOver = false;
+
 	instanciarObjetos();
 
 	animar();
@@ -275,6 +293,10 @@ function iniciar() {
 			nubesPequeñas[index].actualizarSprite();
 			nubesGrandes[index].actualizarSprite();
 		}
+
+		
+
+
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
 		//   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
@@ -307,9 +329,20 @@ function iniciar() {
 		// console.log({cerca:cerca.posicion.y});
 		// });
 
-		goomba.actualizarSprite();
+		if(propGenerales.gameStart) {
 
-		mario.actualizarSprite();
+			goomba.actualizarSprite();
+			mario.actualizarSprite();
+		}
+
+
+
+		// botonPlay.actualizarSprite()
+
+
+		// console.log(botonPlay);
+
+		
 
 		detectarColision(mario, goomba);
 
@@ -375,8 +408,16 @@ function iniciar() {
 					setTimeout(() => {
 						cancelAnimationFrame(idAnimation);
 						propGenerales.gameOver = true;
+
+
+						audioFondo.currentTime = 0
+						imagenComenzar.style.display = "";
+
 						// definirPropGenerales();
 						// iniciar();
+
+						
+
 					}, 3000);
 				}
 			}
@@ -448,7 +489,10 @@ function iniciar() {
 		propGenerales.nubeGrande.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 		propGenerales.nubePequeña.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 
+		propGenerales.botonPlay.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 		propGenerales.goomba.escalaSprite = (canvas.width * 0.7) / (window.innerWidth * proporcion);
+
+
 	}
 
 	window.addEventListener('resize', resize);

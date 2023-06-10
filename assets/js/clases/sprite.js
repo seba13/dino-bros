@@ -9,7 +9,7 @@ class Sprite {
 	 * @param {string[]} sprites
 	 */
 	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, offset = { x: 0, y: 0 }, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
-		this.muerto = false
+		this.muerto = false;
 		this.posicion = posicion;
 		this.velocidad = velocidad;
 		this.imagen = document.createElement('img');
@@ -87,7 +87,6 @@ class Sprite {
 		// 	};
 
 		// ctx.fillStyle = 'rgba(0,0,0,.6)';
-	
 
 		if (this.nombreSprite == 'mario') {
 			console.log(this.rectanguloColision);
@@ -104,9 +103,9 @@ class Sprite {
 			if (this.cuadroActual < this.maximosCuadros - 1) {
 				this.cuadroActual++;
 			} else {
-				if(this.imagen){
-					if(this.sprites ){
-						if(this.sprites['muerto'].imagen != this.imagen){
+				if (this.imagen) {
+					if (this.sprites) {
+						if (this.sprites['muerto'].imagen != this.imagen) {
 							this.cuadroActual = 0;
 						}
 					}
@@ -127,7 +126,7 @@ class Sprite {
 			this.posicion.x += this.velocidad.x;
 			this.velocidad.y += propGenerales.gravedad;
 
-			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite ) {
+			if (this.posicion.y + this.velocidad.y < this.deltaSueloSprite) {
 				this.posicion.y += this.velocidad.y;
 			} else {
 				// if (this.condicion == 0) {
@@ -137,16 +136,14 @@ class Sprite {
 				// 	console.log({ 'coordenada suelo posY': this.deltaSueloSprite });
 				// }
 
-				if(!this.muerto) {
-					console.log("no muerto");
+				if (!this.muerto) {
+					console.log('no muerto');
 					this.posicion.y = this.deltaSueloSprite;
 					this.velocidad.y = 0;
-				}
-				else {
-					this.velocidad.y = this.velocidad.y 
-					
-					
-					this.posicion.y += this.velocidad.y *.05
+				} else {
+					this.velocidad.y = this.velocidad.y;
+
+					this.posicion.y += this.velocidad.y * 0.05;
 				}
 			}
 
@@ -170,7 +167,7 @@ class Sprite {
 		if (this.sprites) {
 			this.coordenadaSalto = 15 - canvas.width / 1920;
 
-			console.log({coordenadaSalto: this.coordenadaSalto});
+			console.log({ coordenadaSalto: this.coordenadaSalto });
 			if (propGenerales.teclas.ArrowUp.presionada && !this.bloquearSalto && !this.muerto) {
 				this.bloquearSalto = true;
 
@@ -181,7 +178,7 @@ class Sprite {
 					this.velocidad.y = -this.coordenadaSalto;
 				}
 			}
-			if (Math.floor(this.posicion.y) != this.deltaSueloSprite  && !this.muerto) {
+			if (Math.floor(this.posicion.y) != this.deltaSueloSprite && !this.muerto) {
 				if (this.ultimaDireccion === 'derecha') {
 					if (this.imagen != this.sprites['saltandoDerecha'].imagen) {
 						this.imagen = this.sprites['saltandoDerecha'].imagen;
@@ -217,23 +214,18 @@ class Sprite {
 				}
 				this.ultimaDireccion = 'derecha';
 				this.velocidad.x = 5;
-			} else
-			if(this.muerto ) {
-				this.bloquearSalto = true
+			} else if (this.muerto) {
+				this.bloquearSalto = true;
 				if (this.imagen != this.sprites['muerto'].imagen) {
 					this.imagen = this.sprites['muerto'].imagen;
 					this.maximosCuadros = this.sprites['muerto'].maximosCuadros;
 					this.cuadroActual = 0;
-					if(!this.bloquearSalto) {
-						this.bloquearSalto = true
-					
+					if (!this.bloquearSalto) {
+						this.bloquearSalto = true;
 					}
 				}
-					this.velocidad.x = 0
-				
-				
-			}
-			else {
+				this.velocidad.x = 0;
+			} else {
 				if (Math.floor(this.posicion.y) === this.deltaSueloSprite) {
 					if (this.ultimaDireccion === 'derecha') {
 						if (this.imagen != this.sprites['inactivoDerecha'].imagen) {
@@ -394,17 +386,14 @@ class Animable extends Sprite {
 	}
 }
 
-
 class Enemigo extends Sprite {
-
 	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
 		super({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite, gravedad, sprites });
 	}
 
-
 	animarSprite() {
 		this.contadorCuadros++;
-		this.velocidad.x = -1
+		this.velocidad.x = -1;
 		// cambia de un cuadro a otro
 		if (this.contadorCuadros % this.contadorLimiteCuadros === 0) {
 			if (this.cuadroActual < this.maximosCuadros - 1) {
@@ -452,7 +441,5 @@ class Enemigo extends Sprite {
 				this.posicion.x = -this.imagen.width * this.escalaSprite;
 			}
 		}
-		
 	}
-
 }

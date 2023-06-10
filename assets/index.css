@@ -32,6 +32,37 @@ body {
     user-select: none;
 }
 
+
+.texto__partida
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    max-width: calc(80%);
+    animation: mover-texto 2s ease infinite ;
+    animation-play-state: paused;
+    
+}
+
+.texto__partida:hover {
+    animation-play-state: running;
+}
+
+@keyframes mover-texto {
+    0% {
+      transform: translate(-50%,-50%) scale(.8) rotate(-8deg);
+    }
+  
+    50% {
+      transform: translate(-50%,-50%) scale(1.2) rotate(0deg);
+    }
+  
+    100% {
+      transform: translate(-50%,-50%) scale(.8) rotate(-8deg);
+    }
+  }
+
 canvas {
     /* display: flex; */
     

@@ -23,8 +23,11 @@ const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container');
 let proporcion = (1920 * 0.9) / window.innerWidth;
 const ctx = canvas.getContext('2d');
-let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba;
-let audioFondo, audioGameOver, audioSalto;
+let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba, botonPlay;
+let audioFondo, audioGameOver, audioSalto, audioHover;
+let imagenComenzar = document.querySelector(".texto__partida");
+
+
 window.addEventListener('load', (e) => {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -32,11 +35,12 @@ window.addEventListener('load', (e) => {
 	audioFondo = document.createElement('audio');
 	audioGameOver = document.createElement('audio');
 	audioSalto = document.createElement('audio');
+	audioHover = document.createElement('audio');
 
 	audioFondo.src = './assets/audio/musica-fondo.mp3';
 	audioGameOver.src = './assets/audio/game-over.mp3';
 	audioSalto.src = './assets/audio/sonido-salto.mp3';
-
+	audioHover.src = './assets/audio/hover-sonido.mp3';
 	audioFondo.style.display = 'none';
 	audioGameOver.style.display = 'none';
 	audioSalto.style.display = 'none';
@@ -44,15 +48,36 @@ window.addEventListener('load', (e) => {
 	containerCanvas.append(audioFondo);
 	containerCanvas.append(audioGameOver);
 	containerCanvas.append(audioSalto);
+	containerCanvas.append(audioHover);
 
-	window.addEventListener('keydown', playMusica);
-	window.addEventListener('pointerdown', playMusica);
+	// window.addEventListener('keydown', playMusica);
+	// window.addEventListener('pointerdown', playMusica);
 
-	function playMusica() {
-		if (audioFondo.paused && !mario.muerto) {
+	imagenComenzar.addEventListener('click', () => {
+
+		if (audioFondo.paused ) {
 			audioFondo.play();
 		}
-	}
+		imagenComenzar.style.display = "none";
+		propGenerales.gameStart = true;
+
+		if(propGenerales.gameOver){
+
+			iniciar()
+		}
+	})
+
+	imagenComenzar.addEventListener('mouseenter', () => {
+		audioHover.currentTime = 0.3
+		audioHover.play();
+	})
+
+
+	// function playMusica() {
+	// 	if (audioFondo.paused && !mario.muerto) {
+	// 		audioFondo.play();
+	// 	}
+	// }
 
 	if (esDispositivoMovil()) {
 		if (window.innerWidth > window.innerHeight) {
@@ -190,11 +215,17 @@ window.addEventListener('load', (e) => {
 				},
 			},
 			gameOver: false,
+			gameStart: false,
 			goomba: {
 				escalaSprite: (canvas.width * 0.7) / (window.innerWidth * proporcion),
 				ancho: 468,
 				alto: 155,
 			},
+			// botonPlay: {
+			// 	escalaSprite: (canvas.width / 2 )/ (window.innerWidth * proporcion),
+			// 	ancho: 512,
+			// 	alto: 512, 
+			// },
 		};
 	}
 
