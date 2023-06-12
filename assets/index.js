@@ -23,9 +23,10 @@ const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container');
 let proporcion = (1920 * 0.9) / window.innerWidth;
 const ctx = canvas.getContext('2d');
-let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba, botonPlay;
+let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba, botonPlay, tableroScore;
 let audioFondo, audioGameOver, audioSalto, audioHover;
 let imagenComenzar = document.querySelector(".texto__partida");
+
 
 
 window.addEventListener('load', (e) => {
@@ -50,15 +51,19 @@ window.addEventListener('load', (e) => {
 	containerCanvas.append(audioSalto);
 	containerCanvas.append(audioHover);
 
+
+	definirPropiedadesGenerales();
+
+
 	// window.addEventListener('keydown', playMusica);
 	// window.addEventListener('pointerdown', playMusica);
 
 	imagenComenzar.addEventListener('click', () => {
+		imagenComenzar.style.display = "none";
 
 		if (audioFondo.paused ) {
 			audioFondo.play();
 		}
-		imagenComenzar.style.display = "none";
 		propGenerales.gameStart = true;
 
 		if(propGenerales.gameOver){
@@ -73,11 +78,6 @@ window.addEventListener('load', (e) => {
 	})
 
 
-	// function playMusica() {
-	// 	if (audioFondo.paused && !mario.muerto) {
-	// 		audioFondo.play();
-	// 	}
-	// }
 
 	if (esDispositivoMovil()) {
 		if (window.innerWidth > window.innerHeight) {
@@ -96,7 +96,7 @@ window.addEventListener('load', (e) => {
 		});
 	}
 
-	definirPropiedadesGenerales();
+	
 
 	function definirPropiedadesGenerales() {
 		propGenerales = {
@@ -216,6 +216,17 @@ window.addEventListener('load', (e) => {
 			},
 			gameOver: false,
 			gameStart: false,
+			tablero: {
+				nombreJugador: '',
+				score: 0,
+				ancho: 501,
+				alto: 142,
+				escalaSprite: canvas.width * .6 / (window.innerWidth * proporcion),
+				tiempoInicial: new Date(),
+				tiempoFinal: new Date(),
+				detenerScore: false,
+				scoreAlmacenado: false,
+			},
 			goomba: {
 				escalaSprite: (canvas.width * 0.7) / (window.innerWidth * proporcion),
 				ancho: 468,

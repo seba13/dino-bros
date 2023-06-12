@@ -8,6 +8,7 @@ class Sprite {
 	 * @param {number} escalaSprite
 	 * @param {string[]} sprites
 	 */
+
 	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, offset = { x: 0, y: 0 }, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
 		this.muerto = false;
 		this.posicion = posicion;
@@ -441,5 +442,64 @@ class Enemigo extends Sprite {
 				this.posicion.x = -this.imagen.width * this.escalaSprite;
 			}
 		}
+	}
+}
+
+class Tablero extends Sprite {
+	constructor({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite = 1, gravedad = 0, sprites = undefined }) {
+		super({ posicion, velocidad, rutaImagen, maximosCuadros, contadorLimiteCuadros, escalaSprite, gravedad, sprites });
+		this.finalizado = false;
+		this.tiempoInicial = new Date();
+		this.tiempoFinal = new Date();
+
+		this.tamañoFuente = 50 * this.escalaSprite;
+	}
+
+	setScore() {
+		if (propGenerales.gameStart && !propGenerales.tablero.detenerScore) {
+			this.tiempoFinal = new Date();
+
+			if (this.tiempoFinal - this.tiempoInicial > 200) {
+				propGenerales.tablero.score += 1;
+
+				this.tiempoInicial = new Date();
+			}
+		}
+	}
+
+	dibujar() {
+		ctx.drawImage(
+			this.imagen,
+			this.cuadroActual * (this.imagen.width / this.maximosCuadros),
+			0,
+			this.imagen.width / this.maximosCuadros,
+			this.imagen.height,
+			this.posicion.x,
+			this.posicion.y + this.offset.y * this.escalaSprite,
+			(this.imagen.width / this.maximosCuadros) * this.escalaSprite,
+			this.imagen.height * this.escalaSprite,
+		);
+
+		console.log({ posicionXSCore: this.posicion.x });
+		console.log({ posicionYScore: this.posicion.y });
+
+		ctx.font = `700 ${this.tamañoFuente}px 'VT323'`;
+		let texto = `Score: ${propGenerales.tablero.score}`;
+		let medidasTexto = ctx.measureText(texto);
+		ctx.fillStyle = 'white';
+		// ctx.textAlign = "center";
+		// ctx.textBaseline = "middle";
+		// ctx.fillText(texto, this.posicion.x + (this.imagen.width / this.maximosCuadros) * this.escalaSprite / 2 , this.posicion.y + (this.imagen.height * this.escalaSprite / 2) + medidasTexto.actualBoundingBoxAscent / 2)
+
+		ctx.fillText(
+			texto,
+			this.posicion.x + (this.imagen.width / 2) * this.escalaSprite - medidasTexto.width / 2,
+			this.posicion.y + (this.imagen.height / 2) * this.escalaSprite + (medidasTexto.actualBoundingBoxAscent - medidasTexto.actualBoundingBoxDescent) / 2,
+		);
+	}
+
+	actualizarSprite() {
+		this.dibujar();
+		this.setScore();
 	}
 }

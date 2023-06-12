@@ -1,48 +1,56 @@
-
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'VT323', 'sans-serif';
 }
 
 body {
     width: 100%;
     min-height: 100vh;
-    cursor: url('./img/cursor_64.png'), default;
-    /* overflow: hidden; */
+    cursor: url('./img/cursor_64.png'), auto;
+    overflow: hidden;
 }
 
-.container 
-{
-    width: 100%;
-    height: 100vh;
-    display: flex;
+input, label {
+    cursor: url('./img/cursor_64.png'), auto;
 }
+
+::-webkit-scrollbar {
+    width: 15px;
+    background: #df7206;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: #cf5c36;
+    border-radius: calc(15px / 2);
+}
+
+
+
 
 
 .boton-saltar {
-    position : fixed;
-	top : 50%;
-	left : 75%;
-	background-color: white;  
-	padding : 1rem;
-	border-radius : 50%;
-	opacity : .4;
+    position: fixed;
+    top: 50%;
+    left: 75%;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 50%;
+    opacity: .4;
     user-select: none;
 }
 
 
-.texto__partida
-{
+.texto__partida {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     max-width: calc(80%);
-    animation: mover-texto 2s ease infinite ;
+    animation: mover-texto 2s ease infinite;
     animation-play-state: paused;
-    
+
 }
 
 .texto__partida:hover {
@@ -51,21 +59,21 @@ body {
 
 @keyframes mover-texto {
     0% {
-      transform: translate(-50%,-50%) scale(.8) rotate(-8deg);
+        transform: translate(-50%, -50%) scale(.8) rotate(-8deg);
     }
-  
+
     50% {
-      transform: translate(-50%,-50%) scale(1.2) rotate(0deg);
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
     }
-  
+
     100% {
-      transform: translate(-50%,-50%) scale(.8) rotate(-8deg);
+        transform: translate(-50%, -50%) scale(.8) rotate(-8deg);
     }
-  }
+}
 
 canvas {
     /* display: flex; */
-    
+
     background-image: url('./img/fondo.png');
     background-size: cover;
     background-position: bottom center;
@@ -74,5 +82,5 @@ canvas {
     width: 100%;
     object-fit: cover;
     object-position: bottom center;
-    
+
 }

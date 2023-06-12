@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Press+Start+2P&family=Roboto:wght@500&family=VT323&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./assets/index.css">
-    
+
 </head>
+
 <body>
-    
+
     <div class="container">
+
+        <!-- <div class="container__nombre-jugador">
+            <label for="nombre-jugador" class="label__nombre-jugador">INGRESE NOMBRE JUGADOR:</label>
+            <input type="text" id="nombre-jugador" class="input__nombre-jugador" value="JUGADOR 1">
+        </div> -->
+
+        <form action="http://192.168.0.10:8888/new-score" method="PUT" class="datos-jugador" style="position: absolute;">
+            <label>
+                INGRESE NOMBRE DE JUGADOR:
+                <input id="nombre-jugador" type="text" value="JUGADOR 1" name="nombre-jugador" autocomplete="off">
+            </label>
+            <input type="submit" value="CONFIRMAR">
+        </form>
+
+
         <div class="container__texto">
-            <img src="./assets/img/mensaje-comienzo-1.png" alt="" class="texto__partida">
+            <img src="./assets/img/mensaje-comienzo-1.png" alt="" class="texto__partida" style="display: none;">
         </div>
         <canvas>
         </canvas>
@@ -22,6 +43,7 @@
 
     <script src="./assets/js/utils.js"></script>
     <script src="./assets/js/clases/sprite.js"></script>
-    <script src="./assets/index.js" ></script>
+    <script src="./assets/index.js"></script>
 </body>
+
 </html>

@@ -259,6 +259,25 @@ function instanciarObjetos() {
 			y: 10,
 		},
 	});
+	tableroScore = new Tablero({
+		posicion: {
+			x: canvas.width - propGenerales.tablero.ancho * propGenerales.tablero.escalaSprite,
+			y: 10,
+		},
+		velocidad: {
+			x: 0,
+			y: 0,
+		},
+		rutaImagen: './assets/img/score.png',
+		contadorLimiteCuadros: 1,
+		maximosCuadros: 1,
+		escalaSprite: propGenerales.tablero.escalaSprite,
+		gravedad: 0,
+		offset: {
+			x: 0,
+			y: 0,
+		},
+	});
 
 	// botonPlay = new Sprite({
 	// 	posicion: {
@@ -275,12 +294,13 @@ function instanciarObjetos() {
 	// 	escalaSprite: propGenerales.botonPlay.escalaSprite,
 	// 	gravedad: 0
 	// })
-
 }
 
 function iniciar() {
+	propGenerales.tablero.detenerScore = false;
 	propGenerales.gameOver = false;
-
+	propGenerales.tablero.score = 0;
+	propGenerales.tablero.scoreAlmacenado = false;
 	instanciarObjetos();
 
 	animar();
@@ -294,9 +314,7 @@ function iniciar() {
 			nubesGrandes[index].actualizarSprite();
 		}
 
-		
-
-
+		tableroScore.actualizarSprite();
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
 		//   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
@@ -329,26 +347,48 @@ function iniciar() {
 		// console.log({cerca:cerca.posicion.y});
 		// });
 
-		if(propGenerales.gameStart) {
-
+		if (propGenerales.gameStart) {
 			goomba.actualizarSprite();
 			mario.actualizarSprite();
 		}
 
-
-
 		// botonPlay.actualizarSprite()
-
 
 		// console.log(botonPlay);
 
-		
-
-		detectarColision(mario, goomba);
+		if (detectarColision(mario, goomba)) {
+			finalizarJuego();
+		}
 
 		if (!propGenerales.gameOver) {
 			idAnimation = requestAnimationFrame(animar);
-		} 
+		}
+	}
+
+	function finalizarJuego() {
+		audioFondo.pause();
+		audioGameOver.play();
+
+		mario.muerto = true;
+		mario.cambiarSprite('muerto');
+
+		propGenerales.tablero.detenerScore = true;
+
+		if (!propGenerales.tablero.scoreAlmacenado) {
+			guardarScore();
+			propGenerales.tablero.scoreAlmacenado = true;
+		}
+		// audioFondo.pause()
+		setTimeout(() => {
+			cancelAnimationFrame(idAnimation);
+			propGenerales.gameOver = true;
+
+			audioFondo.currentTime = 0;
+			imagenComenzar.style.display = '';
+
+			// definirPropGenerales();
+			// iniciar();
+		}, 3000);
 	}
 
 	document.addEventListener('keydown', (e) => {
@@ -365,8 +405,8 @@ function iniciar() {
 			// mario.bloquearSalto = true
 			mario.ultimaTeclaPresionada = 'ArrowUp';
 
-			if(!mario.bloquearSalto && !mario.muerto) {
-				audioSalto.play()
+			if (!mario.bloquearSalto && propGenerales.gameStart) {
+				audioSalto.play();
 			}
 		}
 	});
@@ -397,31 +437,49 @@ function iniciar() {
 		if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
 			if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
 				if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
-					audioFondo.pause()
-					audioGameOver.play()
-					
-					mario.muerto = true;
-					mario.cambiarSprite('muerto');
-
-					
-					// audioFondo.pause()
-					setTimeout(() => {
-						cancelAnimationFrame(idAnimation);
-						propGenerales.gameOver = true;
-
-
-						audioFondo.currentTime = 0
-						imagenComenzar.style.display = "";
-
-						// definirPropGenerales();
-						// iniciar();
-
-						
-
-					}, 3000);
+					return true;
 				}
 			}
 		}
+
+		return false;
+	}
+
+
+	document.addEventListener("submit", (e) => {
+		
+		e.preventDefault();
+
+		if(e.target.elements['nombre-jugador'].value.trim() != '') {
+			propGenerales.tablero.nombreJugador = e.target.elements['nombre-jugador'].value
+
+			imagenComenzar.style.display = ''
+		}else {
+			alert('campo requerido')
+		}
+
+	})
+
+
+	function guardarScore() {
+		const datos = {
+			dato: {
+				nombre: propGenerales.tablero.nombreJugador,
+				puntuacion: propGenerales.tablero.score,
+			},
+		};
+
+		fetch(document.querySelector('form').action, {
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(datos),
+			method: 'PUT',
+		}).then((res) => {
+			console.log(res);
+			return res.json();
+		});
 	}
 
 	function resize(e) {
@@ -489,10 +547,11 @@ function iniciar() {
 		propGenerales.nubeGrande.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 		propGenerales.nubePequeña.escalaSprite = canvas.width / (window.innerWidth * proporcion);
 
-		propGenerales.botonPlay.escalaSprite = canvas.width / (window.innerWidth * proporcion);
+		// propGenerales.botonPlay.escalaSprite = canvas.width / (window.innerWidth * proporcion);
+
+		propGenerales.tablero.escalaSprite = (canvas.width * 0.6) / (window.innerWidth * proporcion);
+
 		propGenerales.goomba.escalaSprite = (canvas.width * 0.7) / (window.innerWidth * proporcion);
-
-
 	}
 
 	window.addEventListener('resize', resize);
@@ -513,8 +572,8 @@ function iniciar() {
 			propGenerales.teclas.ArrowUp.presionada = true;
 			mario.ultimaTeclaPresionada = 'ArrowUp';
 
-			if(!mario.bloquearSalto && !mario.muerto) {
-				audioSalto.play()
+			if (!mario.bloquearSalto && !mario.muerto) {
+				audioSalto.play();
 			}
 			setTimeout(() => {
 				propGenerales.teclas.ArrowUp.presionada = false;
