@@ -40,7 +40,7 @@ app.get('/scores', (req, res) => {
 	return res.json(jsonData);
 });
 
-app.listen(port, '35.160.120.126' || '44.233.151.27' || '34.211.200.85' || '192.168.0.10', () => {
+app.listen(port, () => {
 	console.log('servidor escuchando en el puerto ' + port);
 });
 
