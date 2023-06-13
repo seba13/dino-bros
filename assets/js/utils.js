@@ -299,7 +299,9 @@ function instanciarObjetos() {
 async function cargarPuntuaciones() {
 	try {
 		let res = await fetch('/scores');
-		let json = await res.json();
+		let json = (await res.json()).puntuaciones;
+
+
 
 		let fragment = document.createDocumentFragment();
 		let arrayPuntuaciones = Object.values(json);
@@ -351,7 +353,7 @@ function iniciar() {
 			nubesGrandes[index].actualizarSprite();
 		}
 
-		tableroScore.actualizarSprite();
+		
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
 		//   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
@@ -385,6 +387,7 @@ function iniciar() {
 		// });
 
 		if (propGenerales.gameStart) {
+			tableroScore.actualizarSprite();
 			goomba.actualizarSprite();
 			mario.actualizarSprite();
 		}
@@ -412,12 +415,15 @@ function iniciar() {
 		propGenerales.tablero.detenerScore = true;
 
 		if (!propGenerales.tablero.scoreAlmacenado) {
-			guardarScore();
+			await guardarPuntuacion();
+			cargarPuntuaciones()
 			propGenerales.tablero.scoreAlmacenado = true;
 		}
 		// audioFondo.pause()
 		setTimeout(() => {
 			cancelAnimationFrame(idAnimation);
+
+			
 			propGenerales.gameOver = true;
 
 			audioFondo.currentTime = 0;
@@ -432,13 +438,16 @@ function iniciar() {
 			// containerPuntuaciones.classList.remove('desaparecer-elementos');
 			// containerPuntuaciones.classList.add('aparecer-elementos');
 
-			cargarPuntuaciones().then((res) => {
-				if (res == true) {
-					containerPuntuaciones.style.display = 'flex';
-					containerPuntuaciones.classList.remove('desaparecer-elementos');
-					containerPuntuaciones.classList.add('aparecer-elementos');
-				}
-			});
+			// cargarPuntuaciones().then((res) => {
+			// 	if (res == true) {
+			// 		containerPuntuaciones.style.display = 'flex';
+			// 		containerPuntuaciones.classList.remove('desaparecer-elementos');
+			// 		containerPuntuaciones.classList.add('aparecer-elementos');
+			// 	}
+			// });
+			containerPuntuaciones.style.display = 'flex';
+			containerPuntuaciones.classList.remove('desaparecer-elementos');
+			containerPuntuaciones.classList.add('aparecer-elementos');
 
 			botonJugar.style.display = 'block';
 			botonJugar.classList.add('aparecer-elementos');
@@ -531,25 +540,30 @@ function iniciar() {
 		}
 	});
 
-	function guardarScore() {
+	async function guardarPuntuacion() {
 		const datos = {
-			dato: {
-				nombre: propGenerales.tablero.nombreJugador,
-				puntuacion: propGenerales.tablero.score,
-			},
+			nombre: propGenerales.tablero.nombreJugador,
+			puntuacion: propGenerales.tablero.score,
+			fecha: new Date()
 		};
 
-		fetch(document.querySelector('form').action, {
+		const res = await fetch(document.querySelector('form').action, {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(datos),
 			method: 'PUT',
-		}).then((res) => {
-			console.log(res);
-			return res.json();
-		});
+		})
+
+		json = await res.json();
+
+		console.log(json);
+
+		if(json.success) {
+			return true
+		}
+		return false
 	}
 
 	function resize(e) {
