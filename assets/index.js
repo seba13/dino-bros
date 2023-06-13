@@ -20,6 +20,7 @@
 // INICIO / TERMINO / REINICIO DE JUEGO ✅
 // traspaso de proyecto a node ✅
 // crear api para puntuaciones ✅
+// refactorizar funciones de ocultar/mostrar menu ⭕
 // crear mensaje de alerta para ingresar nombre de jugador ⭕
 
 // CANVAS

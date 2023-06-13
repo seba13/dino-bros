@@ -54,11 +54,19 @@ app.listen(port, () => {
 const agregarNuevoScore = (score) => {
 	const jsonData = JSON.parse(fs.readFileSync('./backend/db/hiScore.json', 'utf8'));
 
-	const ultimaClave = Object.keys(jsonData).reduce((elAnterior, elActual, indexActual) => {
-		console.log({ elActual });
+	let ultimaClave = Object.keys(jsonData)
 
-		return parseInt(elAnterior) > parseInt(elActual) ? elAnterior : elActual;
-	});
+	if(ultimaClave.length > 0) {
+		ultimaClave.reduce((elAnterior, elActual, indexActual) => {
+			console.log({ elActual });
+	
+			return parseInt(elAnterior) > parseInt(elActual) ? elAnterior : elActual;
+		});
+	}else {
+		ultimaClave = 0
+	}
+
+	
 	console.log({ ultimaClave });
 
 	const nuevoDato = {
