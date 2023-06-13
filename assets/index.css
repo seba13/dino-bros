@@ -12,18 +12,241 @@ body {
     overflow: hidden;
 }
 
-input, label {
-    cursor: url('./img/cursor_64.png'), auto;
-}
+
 
 ::-webkit-scrollbar {
     width: 15px;
     background: #df7206;
     border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb {
     background: #cf5c36;
     border-radius: calc(15px / 2);
+}
+
+
+
+.container__datos-jugador {
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(21, 21, 21, .6);
+    display: flex;
+    justify-content: center;
+    /* transition: transform 1s ease; */
+    transform: scale(1);
+}
+
+
+
+
+.aparecer-container {
+    animation: aparecer-container 1s ease forwards;
+}
+
+.desaparecer-container {
+
+    animation: desaparecer-container 1s .5s ease forwards;
+}
+
+@keyframes aparecer-container {
+    from {
+        transform: scale(0, 1);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes desaparecer-container {
+    to {
+        transform: scale(0, 1);
+    }
+}
+
+
+
+
+.form__datos-jugador {
+
+    top: 50%;
+    transform: translate(0, 0%);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 0;
+}
+
+.container__puntuaciones {
+    /* display: flex; */
+    display: none;
+    opacity: 0;
+    margin-top: 1rem;
+    transform: translate(0, 0%);
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+
+
+
+
+.titulo-puntuaciones,
+.subtitulo-puntuaciones {
+
+    color: #FF642F;
+
+}
+
+.container__titulo-puntuaciones {
+    width: 100%;
+}
+
+.titulo-puntuaciones {
+    /* margin-left: 1rem; */
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+
+
+.subtitulo-puntuaciones {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 2rem;
+}
+.subtitulo-puntuaciones h3:nth-child(1) {
+    flex-grow: 1;
+}
+
+.lista__puntuaciones {
+    width: 100%;
+    height: 80%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+    padding-right: 1rem;
+}
+
+.item__lista__puntuaciones {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+}
+.item__lista__puntuaciones p {
+    font-size: 1.5rem;
+    color: #fff;
+    /* flex-basis: 1; */
+}
+
+.item__lista__puntuaciones p:nth-child(1) {
+    flex-grow: 1;
+}
+
+
+
+
+.aparecer-elementos {
+    animation: aparecer-elementos .5s .7s ease forwards;
+}
+
+.desaparecer-elementos {
+    animation: desaparecer-elementos .7s  ease forwards;
+}
+
+@keyframes aparecer-elementos {
+    from {
+        opacity: 0;
+        transform: translate(0, -50%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0%);
+    }
+}
+
+@keyframes desaparecer-elementos {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+
+.form__datos-jugador input,
+.form__datos-jugador label {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #FF5400;
+    cursor: url('./img/cursor_64.png'), auto;
+}
+
+
+.form__datos-jugador .texto__datos-jugador {
+    background-color: #ff7d3c48;
+    border-radius: 1rem;
+    padding: 0 2rem;
+    color: #fff;
+    outline: none;
+    border: none;
+}
+
+.form__datos-jugador .texto__datos-jugador::placeholder {
+    color: #fea071;
+}
+
+.container__botones button ,
+.form__datos-jugador .boton__datos-jugador {
+    margin-top: 1rem;
+    background-color: #FF5400;
+    color: #fff;
+    padding: .4rem 1.5rem;
+    border: none;
+    border-radius: 1rem;
+    transform: scale(1);
+    transition: transform .5s ease;
+}
+
+.container__botones button:hover ,
+.form__datos-jugador .boton__datos-jugador:hover {
+    transform: scale(1.2);
+}
+
+
+
+.container__botones {
+    position: absolute;
+    left: 0;
+}
+
+.container__botones button {
+    margin-left: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    cursor: url('./img/cursor_64.png'), auto;
+}
+
+.container__botones .boton__jugar ,
+.container__botones .boton__puntuaciones {
+    opacity: 0;
+}
+
+.container__botones .boton__jugar {
+    display: none;
 }
 
 

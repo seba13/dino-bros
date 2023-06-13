@@ -296,6 +296,43 @@ function instanciarObjetos() {
 	// })
 }
 
+async function cargarPuntuaciones() {
+	try {
+		let res = await fetch('/scores');
+		let json = await res.json();
+
+		let fragment = document.createDocumentFragment();
+		let arrayPuntuaciones = Object.values(json);
+
+		while (listaPuntuaciones.firstChild) {
+			listaPuntuaciones.removeChild(listaPuntuaciones.firstChild);
+		}
+
+		arrayPuntuaciones.sort((a, b) => b.puntuacion - a.puntuacion);
+
+		for (index in arrayPuntuaciones) {
+			let liJugador = document.createElement('li');
+			liJugador.classList.add('item__lista__puntuaciones');
+
+			let nombreJugador = document.createElement('p');
+			nombreJugador.textContent = arrayPuntuaciones[index].nombre;
+
+			let puntuacionJugador = document.createElement('p');
+			puntuacionJugador.textContent = arrayPuntuaciones[index].puntuacion;
+
+			await liJugador.append(nombreJugador);
+			await liJugador.append(puntuacionJugador);
+
+			await fragment.append(liJugador);
+		}
+		await listaPuntuaciones.append(fragment);
+
+		return true;
+	} catch (err) {
+		return false;
+	}
+}
+
 function iniciar() {
 	propGenerales.tablero.detenerScore = false;
 	propGenerales.gameOver = false;
@@ -365,7 +402,7 @@ function iniciar() {
 		}
 	}
 
-	function finalizarJuego() {
+	async function finalizarJuego() {
 		audioFondo.pause();
 		audioGameOver.play();
 
@@ -384,10 +421,31 @@ function iniciar() {
 			propGenerales.gameOver = true;
 
 			audioFondo.currentTime = 0;
-			imagenComenzar.style.display = '';
 
-			// definirPropGenerales();
-			// iniciar();
+			containerDatosJugador.classList.add('aparecer-container');
+			containerDatosJugador.classList.remove('desaparecer-container');
+
+			// document.querySelector('form').classList.add('aparecer-elementos');
+			// document.querySelector('form').classList.remove('desaparecer-elementos');
+
+			// containerPuntuaciones.style.display = 'flex';
+			// containerPuntuaciones.classList.remove('desaparecer-elementos');
+			// containerPuntuaciones.classList.add('aparecer-elementos');
+
+			cargarPuntuaciones().then((res) => {
+				if (res == true) {
+					containerPuntuaciones.style.display = 'flex';
+					containerPuntuaciones.classList.remove('desaparecer-elementos');
+					containerPuntuaciones.classList.add('aparecer-elementos');
+				}
+			});
+
+			botonJugar.style.display = 'block';
+			botonJugar.classList.add('aparecer-elementos');
+			botonJugar.classList.remove('desaparecer-elementos');
+
+			document.querySelector('form').elements['nombre-jugador'].value = '';
+
 		}, 3000);
 	}
 
@@ -445,21 +503,33 @@ function iniciar() {
 		return false;
 	}
 
-
-	document.addEventListener("submit", (e) => {
-		
+	document.addEventListener('submit', (e) => {
 		e.preventDefault();
 
-		if(e.target.elements['nombre-jugador'].value.trim() != '') {
-			propGenerales.tablero.nombreJugador = e.target.elements['nombre-jugador'].value
+		if (e.target.elements['nombre-jugador'].value.trim() != '') {
+			propGenerales.tablero.nombreJugador = e.target.elements['nombre-jugador'].value;
 
-			imagenComenzar.style.display = ''
-		}else {
-			alert('campo requerido')
+			containerDatosJugador.classList.remove('aparecer-container');
+			containerDatosJugador.classList.add('desaparecer-container');
+
+			botonJugar.classList.remove('aparecer-elementos');
+			botonJugar.classList.add('desaparecer-elementos');
+
+			botonPuntuaciones.classList.remove('aparecer-elementos');
+			botonPuntuaciones.classList.add('desaparecer-elementos');
+
+			containerDatosJugador.addEventListener('animationend', (e) => {
+				if (e.animationName === 'desaparecer-container') {
+					imagenComenzar.style.display = '';
+				}
+			});
+
+			e.target.classList.remove('aparecer-elementos');
+			e.target.classList.add('desaparecer-elementos');
+		} else {
+			alert('campo requerido');
 		}
-
-	})
-
+	});
 
 	function guardarScore() {
 		const datos = {

@@ -480,17 +480,12 @@ class Tablero extends Sprite {
 			this.imagen.height * this.escalaSprite,
 		);
 
-		console.log({ posicionXSCore: this.posicion.x });
-		console.log({ posicionYScore: this.posicion.y });
 
 		ctx.font = `700 ${this.tamañoFuente}px 'VT323'`;
 		let texto = `Score: ${propGenerales.tablero.score}`;
 		let medidasTexto = ctx.measureText(texto);
 		ctx.fillStyle = 'white';
-		// ctx.textAlign = "center";
-		// ctx.textBaseline = "middle";
-		// ctx.fillText(texto, this.posicion.x + (this.imagen.width / this.maximosCuadros) * this.escalaSprite / 2 , this.posicion.y + (this.imagen.height * this.escalaSprite / 2) + medidasTexto.actualBoundingBoxAscent / 2)
-
+	
 		ctx.fillText(
 			texto,
 			this.posicion.x + (this.imagen.width / 2) * this.escalaSprite - medidasTexto.width / 2,

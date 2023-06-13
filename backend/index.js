@@ -5,11 +5,18 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cors from 'cors';
+import * as dotenv from 'dotenv' 
+
+dotenv.config({path: './.env'});
+
 
 const app = express();
 const port = process.env.PORT || 8888;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
