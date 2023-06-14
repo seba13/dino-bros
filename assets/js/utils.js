@@ -301,8 +301,6 @@ async function cargarPuntuaciones() {
 		let res = await fetch('/scores');
 		let json = (await res.json()).puntuaciones;
 
-
-
 		let fragment = document.createDocumentFragment();
 		let arrayPuntuaciones = Object.values(json);
 
@@ -316,13 +314,31 @@ async function cargarPuntuaciones() {
 			let liJugador = document.createElement('li');
 			liJugador.classList.add('item__lista__puntuaciones');
 
+			let numeroJugador = document.createElement('p');
+			numeroJugador.textContent = `#${arrayPuntuaciones[index].id}`;
+
+			let fechaJugador = document.createElement('p');
+			const fecha = new Date(arrayPuntuaciones[index].fecha)
+			
+			const anio = fecha.getFullYear()
+			const mes = fecha.getMonth() < 10 ? '0'+fecha.getMonth() : fecha.getMonth()
+			const dia = fecha.getDay() < 10 ? '0'+fecha.getDay() : fecha.getDay()
+
+			const horas = fecha.getHours() < 10 ? '0'+fecha.getHours() : fecha.getHours()
+			const minutos = fecha.getMinutes() < 10 ? '0'+fecha.getMinutes() : fecha.getMinutes()
+			const segundos = fecha.getSeconds() < 10 ? '0'+fecha.getSeconds() : fecha.getSeconds()
+
+			fechaJugador.textContent = `${anio}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+
 			let nombreJugador = document.createElement('p');
 			nombreJugador.textContent = arrayPuntuaciones[index].nombre;
 
 			let puntuacionJugador = document.createElement('p');
 			puntuacionJugador.textContent = arrayPuntuaciones[index].puntuacion;
 
+			await liJugador.append(numeroJugador);
 			await liJugador.append(nombreJugador);
+			await liJugador.append(fechaJugador);
 			await liJugador.append(puntuacionJugador);
 
 			await fragment.append(liJugador);
@@ -352,8 +368,6 @@ function iniciar() {
 			nubesPequeñas[index].actualizarSprite();
 			nubesGrandes[index].actualizarSprite();
 		}
-
-		
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
 		//   suelo.posicion.x = index * propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite;
@@ -415,21 +429,26 @@ function iniciar() {
 		propGenerales.tablero.detenerScore = true;
 
 		if (!propGenerales.tablero.scoreAlmacenado) {
-			await guardarPuntuacion();
-			cargarPuntuaciones()
 			propGenerales.tablero.scoreAlmacenado = true;
+			
+			let puntajeGuardado = await guardarPuntuacion();
+
+			if(puntajeGuardado) {
+
+				await cargarPuntuaciones();
+			}
+
 		}
 		// audioFondo.pause()
 		setTimeout(() => {
 			cancelAnimationFrame(idAnimation);
 
-			
 			propGenerales.gameOver = true;
 
 			audioFondo.currentTime = 0;
 
-			containerDatosJugador.classList.add('aparecer-container');
 			containerDatosJugador.classList.remove('desaparecer-container');
+			containerDatosJugador.classList.add('aparecer-container');
 
 			// document.querySelector('form').classList.add('aparecer-elementos');
 			// document.querySelector('form').classList.remove('desaparecer-elementos');
@@ -445,16 +464,23 @@ function iniciar() {
 			// 		containerPuntuaciones.classList.add('aparecer-elementos');
 			// 	}
 			// });
-			containerPuntuaciones.style.display = 'flex';
-			containerPuntuaciones.classList.remove('desaparecer-elementos');
-			containerPuntuaciones.classList.add('aparecer-elementos');
+			// containerPuntuaciones.style.display = 'flex';
 
-			botonJugar.style.display = 'block';
-			botonJugar.classList.add('aparecer-elementos');
-			botonJugar.classList.remove('desaparecer-elementos');
+			containerDatosJugador.addEventListener('animationend', (e) => {
+				if(e.animationName === 'aparecer-container') {
+					containerPuntuaciones.classList.remove('desaparecer-elementos');
+					containerPuntuaciones.style.display = 'flex';
+					containerPuntuaciones.classList.add('aparecer-elementos');
+		
+					botonJugar.style.display = 'inline-block';
+					botonJugar.classList.add('aparecer-elementos');
+					botonJugar.classList.remove('desaparecer-elementos');
+		
+					document.querySelector('form').elements['nombre-jugador'].value = '';
+				}
+			})
 
-			document.querySelector('form').elements['nombre-jugador'].value = '';
-
+			
 		}, 3000);
 	}
 
@@ -492,15 +518,7 @@ function iniciar() {
 	});
 
 	function detectarColision(mario, enemigo) {
-		// if(mario.posicion.x + ( (mario.imagen.width / mario.maximosCuadros) - mario.offset.x) * mario.escalaSprite  >= goomba.posicion.x && mario.posicion.x + mario.offset.x <= enemigo.posicion.x + (enemigo.imagen.width / enemigo.maximosCuadros) * enemigo.escalaSprite) {
-
-		// 	if(mario.posicion.y +  (mario.imagen.height) * mario.escalaSprite - mario.offset.y >= enemigo.posicion.y) {
-
-		// 		alert("colision")
-		// 	}
-
-		// }
-
+	
 		if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
 			if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
 				if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
@@ -508,11 +526,11 @@ function iniciar() {
 				}
 			}
 		}
-
 		return false;
 	}
 
 	document.addEventListener('submit', (e) => {
+
 		e.preventDefault();
 
 		if (e.target.elements['nombre-jugador'].value.trim() != '') {
@@ -536,7 +554,7 @@ function iniciar() {
 			e.target.classList.remove('aparecer-elementos');
 			e.target.classList.add('desaparecer-elementos');
 		} else {
-			alert('campo requerido');
+			crearAlerta({})
 		}
 	});
 
@@ -544,7 +562,7 @@ function iniciar() {
 		const datos = {
 			nombre: propGenerales.tablero.nombreJugador,
 			puntuacion: propGenerales.tablero.score,
-			fecha: new Date()
+			fecha: new Date(),
 		};
 
 		const res = await fetch(document.querySelector('form').action, {
@@ -554,16 +572,14 @@ function iniciar() {
 			},
 			body: JSON.stringify(datos),
 			method: 'PUT',
-		})
+		});
 
 		json = await res.json();
 
-		console.log(json);
-
-		if(json.success) {
-			return true
+		if (json.success) {
+			return true;
 		}
-		return false
+		return false;
 	}
 
 	function resize(e) {

@@ -5,7 +5,9 @@ import { establecerConexion } from '../db/db.js';
 export const agregarNuevoScore = async (req, res) => {
 	try {
 		await establecerConexion();
-		const ultimoId = (await Puntuacion.findOne({}).sort({ id: 'desc' })).id || 0;
+		const {id : ultimoId = 0} = (await Puntuacion.findOne({}).sort({ id: 'desc' })) || {}
+
+		console.log({ ultimoId });
 
 		const { nombre, puntuacion, fecha } = req.body;
 
@@ -24,6 +26,8 @@ export const agregarNuevoScore = async (req, res) => {
 
 		res.status(200).json({ success: true, mensaje: 'Puntuación agregada con éxito' });
 	} catch (error) {
+		console.log(error);
+
 		res.status(500).json({ success: false, mensaje: 'Error al guardar puntuación' } + error.message);
 	}
 };

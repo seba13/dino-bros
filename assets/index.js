@@ -34,6 +34,9 @@ let proporcion = (1920 * 0.9) / window.innerWidth;
 // ELEMENTOS Y PROPIEDADES DE CANVAS
 let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba, botonPlay, tableroScore;
 
+//container de alertas
+let containerAlertas = document.querySelector(".container__alertas");
+
 // ELEMENTOS DE AUDIO
 let audioFondo, audioGameOver, audioSalto, audioHover;
 
@@ -47,6 +50,7 @@ let containerPuntuaciones = document.querySelector('.container__puntuaciones');
 let listaPuntuaciones = document.querySelector('.lista__puntuaciones');
 
 window.addEventListener('load', (e) => {
+
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
@@ -71,10 +75,11 @@ window.addEventListener('load', (e) => {
 	definirPropiedadesGenerales();
 	cargarPuntuaciones();
 
-	// window.addEventListener('keydown', playMusica);
-	// window.addEventListener('pointerdown', playMusica);
 
-	botonPuntuaciones.addEventListener('click', () => {
+	botonJugar.addEventListener('click', ocultarFormularioJugador);
+	botonPuntuaciones.addEventListener('click', ocultarPuntajeJugadores);
+
+	function ocultarPuntajeJugadores(e) {
 		botonPuntuaciones.addEventListener('animationend', (e) => {
 			if (e.animationName == 'desaparecer-elementos') {
 				botonPuntuaciones.style.display = 'none';
@@ -95,9 +100,9 @@ window.addEventListener('load', (e) => {
 
 		botonPuntuaciones.classList.remove('aparecer-elementos');
 		botonPuntuaciones.classList.add('desaparecer-elementos');
-	});
+	}
 
-	botonJugar.addEventListener('click', () => {
+	function ocultarFormularioJugador(e) {
 		botonJugar.addEventListener('animationend', (e) => {
 			if (e.animationName == 'desaparecer-elementos') {
 				botonPuntuaciones.style.display = '';
@@ -109,21 +114,23 @@ window.addEventListener('load', (e) => {
 
 				formularioJugador.classList.remove('desaparecer-elementos');
 				formularioJugador.classList.add('aparecer-elementos');
-
-				containerPuntuaciones.classList.remove('aparecer-elementos');
-				containerPuntuaciones.classList.add('desaparecer-elementos');
-
-				containerPuntuaciones.addEventListener('animationend', (e) => {
-					if (e.animationName == 'desaparecer-elementos') {
-						containerPuntuaciones.style.display = 'none';
-					}
-				});
 			}
 		});
 
 		botonJugar.classList.remove('aparecer-elementos');
 		botonJugar.classList.add('desaparecer-elementos');
-	});
+
+		containerPuntuaciones.classList.remove('aparecer-elementos');
+		containerPuntuaciones.classList.add('desaparecer-elementos');
+
+		containerPuntuaciones.addEventListener('animationend', (e) => {
+			if (e.animationName == 'desaparecer-elementos') {
+				containerPuntuaciones.style.display = 'none';
+			}
+		});
+	}
+
+	
 
 	imagenComenzar.addEventListener('click', () => {
 		imagenComenzar.style.display = 'none';
