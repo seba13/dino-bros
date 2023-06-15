@@ -3,7 +3,7 @@ import { MONGODB_URI } from '../config/config.js';
 
 export const establecerConexion = async () => {
 	try {
-		const db = await mongoose.connect(MONGODB_URI);
+		const db = await mongoose.connect(MONGODB_URI, { dbName: 'dinoBrosDB' });
 
 		console.log(`Conectado a ${db.connection.name}`);
 	} catch (error) {

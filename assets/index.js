@@ -9,8 +9,9 @@
 
 // VELOCIDAD CONSTANTE DEL PERSONAJE ✅
 // ---> AJUSTAR VELOCIDAD PERSONAJE EN DISPOSITIVOS MOBILES ⭕
-// APARICIÓN DE ENEMIGOS ⭕
+// ALGORITMO DE APARICIÓN DE ENEMIGOS ⭕
 // PINTAR ELEMENTOS PAISAJE ✅
+// AGREGAR PERSONA KOOPA(TORTUGA) EN LIENZO CANVAS ⭕
 
 // MENÚ ✅
 // ------> ARREGLAR MENÚ EN OTRAS RESOLUCIONES ⭕
@@ -20,8 +21,8 @@
 // INICIO / TERMINO / REINICIO DE JUEGO ✅
 // traspaso de proyecto a node ✅
 // crear api para puntuaciones ✅
-// refactorizar funciones de ocultar/mostrar menu ⭕
-// crear mensaje de alerta para ingresar nombre de jugador ⭕
+// refactorizar funciones de ocultar/mostrar menu ✅
+// crear mensaje de alerta para ingresar nombre de jugador ✅
 
 // CANVAS
 const canvas = document.querySelector('canvas');
@@ -32,16 +33,17 @@ const ctx = canvas.getContext('2d');
 let proporcion = (1920 * 0.9) / window.innerWidth;
 
 // ELEMENTOS Y PROPIEDADES DE CANVAS
-let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, goomba, botonPlay, tableroScore;
+let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, enemigos, goomba, koopa, tableroScore;
 
 //container de alertas
-let containerAlertas = document.querySelector(".container__alertas");
+let containerAlertas = document.querySelector('.container__alertas');
 
 // ELEMENTOS DE AUDIO
 let audioFondo, audioGameOver, audioSalto, audioHover;
 
 // ELEMENTOS COMENZAR PARTIDA
 let imagenComenzar = document.querySelector('.texto__partida');
+let imagenNumeros = document.querySelector('.numeros__partida');
 let containerDatosJugador = document.querySelector('.container__datos-jugador');
 let botonPuntuaciones = document.querySelector('.boton__puntuaciones');
 let botonJugar = document.querySelector('.boton__jugar');
@@ -50,7 +52,6 @@ let containerPuntuaciones = document.querySelector('.container__puntuaciones');
 let listaPuntuaciones = document.querySelector('.lista__puntuaciones');
 
 window.addEventListener('load', (e) => {
-
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
@@ -75,9 +76,9 @@ window.addEventListener('load', (e) => {
 	definirPropiedadesGenerales();
 	cargarPuntuaciones();
 
-
 	botonJugar.addEventListener('click', ocultarFormularioJugador);
 	botonPuntuaciones.addEventListener('click', ocultarPuntajeJugadores);
+	audioFondo.addEventListener('ended', reiniciarMusica);
 
 	function ocultarPuntajeJugadores(e) {
 		botonPuntuaciones.addEventListener('animationend', (e) => {
@@ -130,25 +131,17 @@ window.addEventListener('load', (e) => {
 		});
 	}
 
-	
-
-	imagenComenzar.addEventListener('click', () => {
-		imagenComenzar.style.display = 'none';
-
-		if (audioFondo.paused) {
+	function reiniciarMusica() {
+		if (propGenerales.gameStart) {
+			audioFondo.currentTime = 0;
 			audioFondo.play();
 		}
-		propGenerales.gameStart = true;
+	}
 
-		if (propGenerales.gameOver) {
-			iniciar();
-		}
-	});
-
-	imagenComenzar.addEventListener('mouseenter', () => {
-		audioHover.currentTime = 0.3;
-		audioHover.play();
-	});
+	// imagenComenzar.addEventListener('mouseenter', () => {
+	// 	audioHover.currentTime = 0.3;
+	// 	audioHover.play();
+	// });
 
 	if (esDispositivoMovil()) {
 		if (window.innerWidth > window.innerHeight) {
@@ -297,6 +290,11 @@ window.addEventListener('load', (e) => {
 				scoreAlmacenado: false,
 			},
 			goomba: {
+				escalaSprite: (canvas.width * 0.7) / (window.innerWidth * proporcion),
+				ancho: 468,
+				alto: 155,
+			},
+			koopa: {
 				escalaSprite: (canvas.width * 0.7) / (window.innerWidth * proporcion),
 				ancho: 468,
 				alto: 155,

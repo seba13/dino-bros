@@ -239,7 +239,12 @@ function instanciarObjetos() {
 		);
 	});
 
-	goomba = new Enemigo({
+
+
+	enemigos = []
+
+
+	enemigos.push(goomba = new Enemigo({
 		posicion: {
 			x: canvas.width / 1.2,
 			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
@@ -258,7 +263,73 @@ function instanciarObjetos() {
 			x: 0,
 			y: 10,
 		},
-	});
+	}))
+
+	// goomba = new Enemigo({
+	// 	posicion: {
+	// 		x: canvas.width / 1.2,
+	// 		y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
+	// 		// y: 0,
+	// 	},
+	// 	velocidad: {
+	// 		x: 0,
+	// 		y: 0,
+	// 	},
+	// 	rutaImagen: './assets/img/sprite-goomba-3.png',
+	// 	contadorLimiteCuadros: 25,
+	// 	maximosCuadros: 4,
+	// 	escalaSprite: propGenerales.goomba.escalaSprite,
+	// 	gravedad: 1,
+	// 	offset: {
+	// 		x: 0,
+	// 		y: 10,
+	// 	},
+	// });
+
+	enemigos.push(new Enemigo({
+		posicion: {
+			x: canvas.width,
+			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.koopa.alto * propGenerales.koopa.escalaSprite
+		},
+		velocidad: {
+			x: 0,
+			y: 0,
+		},
+		rutaImagen: './assets/img/sprite-koopa-3.png',
+		contadorLimiteCuadros: 25,
+		maximosCuadros: 5,
+		escalaSprite: propGenerales.koopa.escalaSprite,
+		gravedad: 1,
+		offset: {
+			x: 0,
+			y: 15,
+		},
+	}))
+
+
+
+	// koopa = new Enemigo({
+	// 	posicion: {
+	// 		x: canvas.width,
+	// 		y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.koopa.alto * propGenerales.koopa.escalaSprite
+	// 	},
+	// 	velocidad: {
+	// 		x: 0,
+	// 		y: 0,
+	// 	},
+	// 	rutaImagen: './assets/img/sprite-koopa-3.png',
+	// 	contadorLimiteCuadros: 25,
+	// 	maximosCuadros: 5,
+	// 	escalaSprite: propGenerales.koopa.escalaSprite,
+	// 	gravedad: 1,
+	// 	offset: {
+	// 		x: 0,
+	// 		y: 10,
+	// 	},
+	// })
+
+
+
 	tableroScore = new Tablero({
 		posicion: {
 			x: canvas.width - propGenerales.tablero.ancho * propGenerales.tablero.escalaSprite,
@@ -318,15 +389,15 @@ async function cargarPuntuaciones() {
 			numeroJugador.textContent = `#${arrayPuntuaciones[index].id}`;
 
 			let fechaJugador = document.createElement('p');
-			const fecha = new Date(arrayPuntuaciones[index].fecha)
-			
-			const anio = fecha.getFullYear()
-			const mes = fecha.getMonth() < 10 ? '0'+fecha.getMonth() : fecha.getMonth()
-			const dia = fecha.getDay() < 10 ? '0'+fecha.getDay() : fecha.getDay()
+			const fecha = new Date(arrayPuntuaciones[index].fecha);
 
-			const horas = fecha.getHours() < 10 ? '0'+fecha.getHours() : fecha.getHours()
-			const minutos = fecha.getMinutes() < 10 ? '0'+fecha.getMinutes() : fecha.getMinutes()
-			const segundos = fecha.getSeconds() < 10 ? '0'+fecha.getSeconds() : fecha.getSeconds()
+			const anio = fecha.getFullYear();
+			const mes = fecha.getMonth() < 10 ? '0' + fecha.getMonth() : fecha.getMonth();
+			const dia = fecha.getDay() < 10 ? '0' + fecha.getDay() : fecha.getDay();
+
+			const horas = fecha.getHours() < 10 ? '0' + fecha.getHours() : fecha.getHours();
+			const minutos = fecha.getMinutes() < 10 ? '0' + fecha.getMinutes() : fecha.getMinutes();
+			const segundos = fecha.getSeconds() < 10 ? '0' + fecha.getSeconds() : fecha.getSeconds();
 
 			fechaJugador.textContent = `${anio}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
 
@@ -350,6 +421,9 @@ async function cargarPuntuaciones() {
 		return false;
 	}
 }
+
+
+
 
 function iniciar() {
 	propGenerales.tablero.detenerScore = false;
@@ -402,15 +476,22 @@ function iniciar() {
 
 		if (propGenerales.gameStart) {
 			tableroScore.actualizarSprite();
-			goomba.actualizarSprite();
+			// goomba.actualizarSprite();
+			// koopa.actualizarSprite();
+
+			enemigos.forEach((enemigo) => {
+				enemigo.actualizarSprite();
+			})
+
 			mario.actualizarSprite();
+
 		}
 
 		// botonPlay.actualizarSprite()
 
 		// console.log(botonPlay);
 
-		if (detectarColision(mario, goomba)) {
+		if (detectarColision(mario, enemigos)) {
 			finalizarJuego();
 		}
 
@@ -430,14 +511,12 @@ function iniciar() {
 
 		if (!propGenerales.tablero.scoreAlmacenado) {
 			propGenerales.tablero.scoreAlmacenado = true;
-			
+
 			let puntajeGuardado = await guardarPuntuacion();
 
-			if(puntajeGuardado) {
-
+			if (puntajeGuardado) {
 				await cargarPuntuaciones();
 			}
-
 		}
 		// audioFondo.pause()
 		setTimeout(() => {
@@ -467,20 +546,18 @@ function iniciar() {
 			// containerPuntuaciones.style.display = 'flex';
 
 			containerDatosJugador.addEventListener('animationend', (e) => {
-				if(e.animationName === 'aparecer-container') {
+				if (e.animationName === 'aparecer-container') {
 					containerPuntuaciones.classList.remove('desaparecer-elementos');
 					containerPuntuaciones.style.display = 'flex';
 					containerPuntuaciones.classList.add('aparecer-elementos');
-		
+
 					botonJugar.style.display = 'inline-block';
 					botonJugar.classList.add('aparecer-elementos');
 					botonJugar.classList.remove('desaparecer-elementos');
-		
+
 					document.querySelector('form').elements['nombre-jugador'].value = '';
 				}
-			})
-
-			
+			});
 		}, 3000);
 	}
 
@@ -517,20 +594,23 @@ function iniciar() {
 		}
 	});
 
-	function detectarColision(mario, enemigo) {
-	
-		if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
-			if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
-				if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
-					return true;
+	function detectarColision(mario, enemigos) {
+		let colisionDetectada = false;
+
+		enemigos.forEach( enemigo => {
+			if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
+				if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
+					if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
+						colisionDetectada = true;
+					}
 				}
 			}
-		}
-		return false;
+		})
+
+		return colisionDetectada;
 	}
 
 	document.addEventListener('submit', (e) => {
-
 		e.preventDefault();
 
 		if (e.target.elements['nombre-jugador'].value.trim() != '') {
@@ -547,16 +627,53 @@ function iniciar() {
 
 			containerDatosJugador.addEventListener('animationend', (e) => {
 				if (e.animationName === 'desaparecer-container') {
-					imagenComenzar.style.display = '';
+					// imagenComenzar.style.display = '';
+					animarNumeros();
 				}
 			});
 
 			e.target.classList.remove('aparecer-elementos');
 			e.target.classList.add('desaparecer-elementos');
 		} else {
-			crearAlerta({})
+			crearAlerta({});
 		}
 	});
+
+	function animarNumeros() {
+		imagenNumeros.style.display = '';
+
+		imagenNumeros.style.setProperty('--i', 2);
+		let i = parseInt(window.getComputedStyle(imagenNumeros).getPropertyValue('--i'));
+
+		imagenNumeros.addEventListener('animationiteration', (e) => {
+			if (e.animationName === 'crecer-texto') {
+				i -= 1;
+				imagenNumeros.style.setProperty('--i', i.toString());
+			}
+		});
+
+		imagenNumeros.addEventListener('animationend', (e) => {
+			if (e.animationName === 'crecer-texto') {
+				imagenNumeros.style.display = 'none';
+				imagenComenzar.style.display = '';
+			}
+		});
+
+		imagenComenzar.addEventListener('animationend', (e) => {
+			if (e.animationName == 'disminuir-texto') {
+				imagenComenzar.style.display = 'none';
+				if (audioFondo.paused) {
+					audioFondo.play();
+				}
+				propGenerales.gameStart = true;
+				if (propGenerales.gameOver) {
+					iniciar();
+				}
+			}
+		});
+
+		// console.log({i})
+	}
 
 	async function guardarPuntuacion() {
 		const datos = {

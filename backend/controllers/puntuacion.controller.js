@@ -5,7 +5,7 @@ import { establecerConexion } from '../db/db.js';
 export const agregarNuevoScore = async (req, res) => {
 	try {
 		await establecerConexion();
-		const {id : ultimoId = 0} = (await Puntuacion.findOne({}).sort({ id: 'desc' })) || {}
+		const { id: ultimoId = 0 } = (await Puntuacion.findOne({}).sort({ id: 'desc' })) || {};
 
 		console.log({ ultimoId });
 

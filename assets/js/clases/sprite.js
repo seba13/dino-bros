@@ -480,12 +480,11 @@ class Tablero extends Sprite {
 			this.imagen.height * this.escalaSprite,
 		);
 
-
 		ctx.font = `700 ${this.tamañoFuente}px 'VT323'`;
 		let texto = `Score: ${propGenerales.tablero.score}`;
 		let medidasTexto = ctx.measureText(texto);
 		ctx.fillStyle = 'white';
-	
+
 		ctx.fillText(
 			texto,
 			this.posicion.x + (this.imagen.width / 2) * this.escalaSprite - medidasTexto.width / 2,

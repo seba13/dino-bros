@@ -1,14 +1,12 @@
-import {Router} from 'express'
-import { agregarNuevoScore, mostrarPuntuaciones, eliminarScore } from '../controllers/puntuacion.controller.js'
+import { Router } from 'express';
+import { agregarNuevoScore, mostrarPuntuaciones, eliminarScore } from '../controllers/puntuacion.controller.js';
 
-const router = Router()
+const router = Router();
 
+router.get('/scores', mostrarPuntuaciones);
 
+router.put('/new-score', agregarNuevoScore);
 
-router.get('/scores', mostrarPuntuaciones)
+router.delete('/score', eliminarScore);
 
-router.put('/new-score', agregarNuevoScore)
-
-router.delete("/score", eliminarScore)
-
-export default router
+export default router;

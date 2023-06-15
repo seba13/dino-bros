@@ -1,28 +1,23 @@
+function crearAlerta({ mensaje = 'CAMPO NOMBRE DE JUGADOR <b>REQUERIDO<b>', tipo = 'error' }) {
+	const alert = document.createElement('div');
+	alert.classList.add('alerta');
 
+	if (tipo == 'error') {
+		alert.classList.add('alerta--error');
+	} else {
+		alert.classList.add('alerta--info');
+	}
 
-function crearAlerta({ mensaje = 'campo nombre de jugador <b>requerido<b>', tipo = 'error'}) {
+	const p = document.createElement('p');
+	p.innerHTML = mensaje;
 
-    const alert = document.createElement("div");
-    alert.classList.add("alerta");
+	alert.append(p);
 
-    if(tipo == 'error') {
-        alert.classList.add("alerta--error");
-    }else {
-        alert.classList.add("alerta--info");
-    }
+	containerAlertas.append(alert);
 
-    const p = document.createElement("p");
-    p.innerHTML = mensaje
-
-    alert.append(p)
-
-    containerAlertas.append(alert);
-
-    alert.addEventListener('animationend', (e) => {
-        if(e.animationName == 'desaparecer-alerta') {
-            containerAlertas.removeChild(alert);
-        }
-    })
-
-
+	alert.addEventListener('animationend', (e) => {
+		if (e.animationName == 'desaparecer-alerta') {
+			containerAlertas.removeChild(alert);
+		}
+	});
 }

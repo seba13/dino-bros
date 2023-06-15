@@ -2,81 +2,71 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bangers&family=Press+Start+2P&family=Roboto:wght@500&family=VT323&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="./assets/index.css">
-
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>DinoBros</title>
+	<link rel="icon" href="assets/img/favicon.png" type="image/x-icon" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Bangers&family=Press+Start+2P&family=Roboto:wght@500&family=VT323&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="./assets/index.css" />
 </head>
 
 <body>
-
-    <div class="container">
-        
-        <!-- <div class="container__nombre-jugador">
+	<div class="container">
+		<!-- <div class="container__nombre-jugador">
             <label for="nombre-jugador" class="label__nombre-jugador">INGRESE NOMBRE JUGADOR:</label>
             <input type="text" id="nombre-jugador" class="input__nombre-jugador" value="JUGADOR 1">
         </div> -->
 
-        <div class="container__alertas">
-            <!-- <div class="alerta alerta--error"><p>Campo nombre de jugador <b>requerido</b> </p></div> -->
-          
-        </div>
+		<div class="container__alertas">
+			<!-- <div class="alerta alerta--error"><p>Campo nombre de jugador <b>requerido</b> </p></div> -->
+		</div>
 
-        <div class="container__datos-jugador aparecer-container">
-            <form action="/new-score" method="PUT" class="form__datos-jugador aparecer-elementos">
-                <label class="label__datos-jugador">
-                    INGRESE NOMBRE DE JUGADOR:
-                    <input id="nombre-jugador" type="text" value="" placeholder="Jugador #1" name="nombre-jugador" autocomplete="off" class="texto__datos-jugador">
-                </label>
-                <input type="submit" value="CONFIRMAR" class="boton__datos-jugador">
-            </form>
-            <div class="container__botones ">
-                <button class="boton__puntuaciones aparecer-elementos">PUNTUACIONES</button>
-                <button class="boton__jugar">JUGAR</button>
-            </div>
+		<div class="container__datos-jugador aparecer-container">
+			<form action="/new-score" method="PUT" class="form__datos-jugador aparecer-elementos">
+				<label class="label__datos-jugador">
+					INGRESE NOMBRE DE JUGADOR:
+					<input id="nombre-jugador" type="text" value="" placeholder="Jugador #1" name="nombre-jugador"
+						autocomplete="off" class="texto__datos-jugador" />
+				</label>
+				<input type="submit" value="CONFIRMAR" class="boton__datos-jugador" />
+			</form>
+			<div class="container__botones">
+				<button class="boton__puntuaciones aparecer-elementos">PUNTUACIONES</button>
+				<button class="boton__jugar">JUGAR</button>
+			</div>
 
-            <div class="container__puntuaciones">
-                <div class="container__titulo-puntuaciones">
-                    <div class="titulo-puntuaciones">
-                        <h2>PUNTUACIONES</h1>
-                    </div>
-                    <div class="subtitulo-puntuaciones">
-                        <h3># JUGADOR</h3>
-                        <h3>NOMBRE</h3>
-                        <h3>FECHA</h3>
-                        <h3>PUNTUACIÓN</h3>
-                    </div>
-                </div>
-                <ul class="lista__puntuaciones">
-                    
-                </ul>
-            </div>
+			<div class="container__puntuaciones">
+				<div class="container__titulo-puntuaciones">
+					<div class="titulo-puntuaciones">
+						<h2>PUNTUACIONES</h2>
+					</div>
+					<div class="subtitulo-puntuaciones">
+						<h3># JUGADOR</h3>
+						<h3>NOMBRE</h3>
+						<h3>FECHA</h3>
+						<h3>PUNTUACIÓN</h3>
+					</div>
+				</div>
+				<ul class="lista__puntuaciones"></ul>
+			</div>
+		</div>
 
+		<div class="container__texto">
+			<div class="numeros__partida" style="display: none; --i: 2"></div>
+			<img src="./assets/img/mensaje-comienzo-2.png" class="texto__partida" style="display: none" />
+		</div>
+		<canvas> </canvas>
+	</div>
 
-        </div>
-
-
-
-
-        <div class="container__texto">
-            <img src="./assets/img/mensaje-comienzo-1.png" alt="" class="texto__partida" style="display: none;">
-        </div>
-        <canvas>
-        </canvas>
-
-    </div>
-
-    <script src="./assets/js/alert.js"></script>
-    <script src="./assets/js/utils.js"></script>
-    <script src="./assets/js/clases/sprite.js"></script>
-    <script src="./assets/index.js"></script>
+	<script src="./assets/js/alert.js"></script>
+	<script src="./assets/js/utils.js"></script>
+	<script src="./assets/js/clases/sprite.js"></script>
+	<script src="./assets/index.js"></script>
 </body>
 
 </html>
