@@ -343,7 +343,7 @@ body {
 
 .numeros__partida {
 	background-image: url('./img/numeros_partida.png');
-	background-position: calc(-285px * var(--i));
+	background-position: calc(-284px * var(--i));
 	width: 285px;
 	height: 300px;
 	background-repeat: no-repeat;
@@ -392,6 +392,8 @@ canvas {
 	background-size: cover;
 	background-position: bottom center;
 	background-repeat: no-repeat;
+
+	user-select: none;
 
 	width: 100%;
 	object-fit: cover;

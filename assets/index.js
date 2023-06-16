@@ -11,7 +11,8 @@
 // ---> AJUSTAR VELOCIDAD PERSONAJE EN DISPOSITIVOS MOBILES ⭕
 // ALGORITMO DE APARICIÓN DE ENEMIGOS ⭕
 // PINTAR ELEMENTOS PAISAJE ✅
-// AGREGAR PERSONA KOOPA(TORTUGA) EN LIENZO CANVAS ⭕
+// SOLUCIONAR POSICIONAMIENTO (OFFSET Y) DE LOS ENEMIGOS (COMPORTAMIENTO DE ENEMIGOS FLOTANDO) ✅
+// AGREGAR PERSONA KOOPA(TORTUGA) EN LIENZO CANVAS ✅
 
 // MENÚ ✅
 // ------> ARREGLAR MENÚ EN OTRAS RESOLUCIONES ⭕
@@ -29,11 +30,32 @@ const canvas = document.querySelector('canvas');
 const containerCanvas = document.querySelector('.container');
 const ctx = canvas.getContext('2d');
 
+var nativeWidth = 1024;  // the resolution the games is designed to look best in
+var nativeHeight = 768;
+
+var deviceWidth = window.innerWidth;  // please check for browser compatibility
+var deviceHeight = window.innerHeight;
+
+
+const anchoNativo = 1920
+const altoNativo = 963
+
+let anchoNavegador = window.innerWidth
+let altoNavegador = window.innerHeight
+
+
+
 // PROPORCION PANTALLA
 let proporcion = (1920 * 0.9) / window.innerWidth;
 
-// ELEMENTOS Y PROPIEDADES DE CANVAS
-let propGenerales, mario, fondo, flores, cespeds, cercas, suelos, nubesPequeñas, nubesGrandes, enemigos, goomba, koopa, tableroScore;
+// Objeto de propiedades generales del juego
+let propGenerales
+
+// objetos del canvas
+let mario, fondo, goomba, koopa, tableroScore = {};
+
+// Array de objetos del canvas
+let enemigos, nubesGrandes, nubesPequeñas, suelos, cespeds, cercas, flores = [];
 
 //container de alertas
 let containerAlertas = document.querySelector('.container__alertas');
@@ -52,8 +74,16 @@ let containerPuntuaciones = document.querySelector('.container__puntuaciones');
 let listaPuntuaciones = document.querySelector('.lista__puntuaciones');
 
 window.addEventListener('load', (e) => {
+
 	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.height = window.innerHeight
+
+	// escala
+	// 1920 => 1
+	// 1024 =>
+
+	
+
 
 	audioFondo = document.createElement('audio');
 	audioGameOver = document.createElement('audio');
@@ -73,7 +103,7 @@ window.addEventListener('load', (e) => {
 	containerCanvas.append(audioSalto);
 	containerCanvas.append(audioHover);
 
-	definirPropiedadesGenerales();
+	instanciarPropGenerales();
 	cargarPuntuaciones();
 
 	botonJugar.addEventListener('click', ocultarFormularioJugador);
@@ -160,7 +190,7 @@ window.addEventListener('load', (e) => {
 		});
 	}
 
-	function definirPropiedadesGenerales() {
+	function instanciarPropGenerales() {
 		propGenerales = {
 			mario: {
 				escalaSprite: (canvas.width * 0.3) / (window.innerWidth * proporcion),
@@ -172,7 +202,7 @@ window.addEventListener('load', (e) => {
 			fondo: {
 				ancho: 1008,
 				alto: 480,
-				escalaSprite: canvas.width * (window.innerWidth * proporcion),
+				escalaSprite: Math.max(canvas.width/ 1008,  canvas.height/480),
 			},
 			suelo: {
 				alto: 118,
@@ -264,7 +294,9 @@ window.addEventListener('load', (e) => {
 					},
 				],
 			},
-			gravedad: 0.4,
+			// gravedad: Math.max(1920 * 0.3 / canvas.width, 963 * 0.2 / canvas.height),
+			gravedad: .4,
+			// gravedad: 0.3,
 			teclas: {
 				ArrowLeft: {
 					presionada: false,

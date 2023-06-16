@@ -4,23 +4,7 @@ function esDispositivoMovil() {
 
 let idAnimation;
 
-function instanciarObjetos() {
-	fondo = new Sprite({
-		posicion: {
-			x: 0,
-			y: 0,
-		},
-		velocidad: {
-			x: 0,
-			y: 0,
-		},
-		rutaImagen: './assets/img/fondo.png',
-		contadorLimiteCuadros: 1,
-		maximosCuadros: 1,
-		escalaSprite: propGenerales.fondo.escalaSprite,
-		gravedad: 0,
-	});
-
+function instanciarJugador() {
 	mario = new Sprite({
 		posicion: {
 			x: canvas.width / 2.5,
@@ -71,7 +55,9 @@ function instanciarObjetos() {
 			},
 		},
 	});
+}
 
+function instanciarNubes() {
 	nubesPequeñas = [];
 	nubesGrandes = [];
 
@@ -111,7 +97,9 @@ function instanciarObjetos() {
 			}),
 		);
 	}
+}
 
+function instanciarCesped() {
 	cespeds = [];
 
 	propGenerales.cesped.posicionX.forEach((cesped) => {
@@ -133,7 +121,9 @@ function instanciarObjetos() {
 			}),
 		);
 	});
+}
 
+function instanciarSuelo() {
 	suelos = [];
 	for (let index = 0; index <= canvas.width / (propGenerales.suelo.ancho * propGenerales.suelo.escalaSprite); index++) {
 		suelos.push(
@@ -171,7 +161,9 @@ function instanciarObjetos() {
 			}),
 		);
 	}
+}
 
+function instanciarCerca() {
 	cercas = [];
 
 	// recorrer array de posiciones (coordenada x) de cada cerca
@@ -194,9 +186,9 @@ function instanciarObjetos() {
 			}),
 		);
 	});
+}
 
-	console.log({ florY: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.flor.alto * propGenerales.flor.escalaSprite });
-
+function instanciarFlores() {
 	flores = [];
 	propGenerales.flor.florRoja.posicionX.forEach((flor) => {
 		// flor.x
@@ -238,98 +230,60 @@ function instanciarObjetos() {
 			}),
 		);
 	});
+}
 
+function instanciarEnemigo() {
+	enemigos = [];
 
+	enemigos.push(
+		(goomba = new Enemigo({
+			posicion: {
+				x: canvas.width / 1.2,
+				y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
+				// y: 0,
+			},
+			velocidad: {
+				x: 0,
+				y: 0,
+			},
+			rutaImagen: './assets/img/sprite-goomba-3.png',
+			contadorLimiteCuadros: 25,
+			maximosCuadros: 4,
+			escalaSprite: propGenerales.goomba.escalaSprite,
+			gravedad: 1,
+			offset: {
+				x: 0,
+				y: 15,
+			},
+			nombreEnemigo: 'goomba',
+		})),
+	);
 
-	enemigos = []
+	enemigos.push(
+		new Enemigo({
+			posicion: {
+				x: canvas.width,
+				y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.koopa.alto * propGenerales.koopa.escalaSprite,
+			},
+			velocidad: {
+				x: 0,
+				y: 0,
+			},
+			rutaImagen: './assets/img/sprite-koopa-3.png',
+			contadorLimiteCuadros: 25,
+			maximosCuadros: 5,
+			escalaSprite: propGenerales.koopa.escalaSprite,
+			gravedad: 1,
+			offset: {
+				x: 0,
+				y: 15,
+			},
+			nombreEnemigo: 'koopa',
+		}),
+	);
+}
 
-
-	enemigos.push(goomba = new Enemigo({
-		posicion: {
-			x: canvas.width / 1.2,
-			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
-			// y: 0,
-		},
-		velocidad: {
-			x: 0,
-			y: 0,
-		},
-		rutaImagen: './assets/img/sprite-goomba-3.png',
-		contadorLimiteCuadros: 25,
-		maximosCuadros: 4,
-		escalaSprite: propGenerales.goomba.escalaSprite,
-		gravedad: 1,
-		offset: {
-			x: 0,
-			y: 10,
-		},
-	}))
-
-	// goomba = new Enemigo({
-	// 	posicion: {
-	// 		x: canvas.width / 1.2,
-	// 		y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.goomba.alto * propGenerales.goomba.escalaSprite,
-	// 		// y: 0,
-	// 	},
-	// 	velocidad: {
-	// 		x: 0,
-	// 		y: 0,
-	// 	},
-	// 	rutaImagen: './assets/img/sprite-goomba-3.png',
-	// 	contadorLimiteCuadros: 25,
-	// 	maximosCuadros: 4,
-	// 	escalaSprite: propGenerales.goomba.escalaSprite,
-	// 	gravedad: 1,
-	// 	offset: {
-	// 		x: 0,
-	// 		y: 10,
-	// 	},
-	// });
-
-	enemigos.push(new Enemigo({
-		posicion: {
-			x: canvas.width,
-			y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.koopa.alto * propGenerales.koopa.escalaSprite
-		},
-		velocidad: {
-			x: 0,
-			y: 0,
-		},
-		rutaImagen: './assets/img/sprite-koopa-3.png',
-		contadorLimiteCuadros: 25,
-		maximosCuadros: 5,
-		escalaSprite: propGenerales.koopa.escalaSprite,
-		gravedad: 1,
-		offset: {
-			x: 0,
-			y: 15,
-		},
-	}))
-
-
-
-	// koopa = new Enemigo({
-	// 	posicion: {
-	// 		x: canvas.width,
-	// 		y: canvas.height - propGenerales.suelo.alto * propGenerales.suelo.escalaSprite - propGenerales.koopa.alto * propGenerales.koopa.escalaSprite
-	// 	},
-	// 	velocidad: {
-	// 		x: 0,
-	// 		y: 0,
-	// 	},
-	// 	rutaImagen: './assets/img/sprite-koopa-3.png',
-	// 	contadorLimiteCuadros: 25,
-	// 	maximosCuadros: 5,
-	// 	escalaSprite: propGenerales.koopa.escalaSprite,
-	// 	gravedad: 1,
-	// 	offset: {
-	// 		x: 0,
-	// 		y: 10,
-	// 	},
-	// })
-
-
-
+function instanciarTablero() {
 	tableroScore = new Tablero({
 		posicion: {
 			x: canvas.width - propGenerales.tablero.ancho * propGenerales.tablero.escalaSprite,
@@ -349,22 +303,40 @@ function instanciarObjetos() {
 			y: 0,
 		},
 	});
+}
 
-	// botonPlay = new Sprite({
+function instanciarObjetos() {
+	// fondo = new Sprite({
 	// 	posicion: {
-	// 		x: (canvas.width / 2)  - (propGenerales.botonPlay.ancho / 2) * propGenerales.botonPlay.escalaSprite,
-	// 		y: (canvas.height / 2)  - (propGenerales.botonPlay.alto / 2) * propGenerales.botonPlay.escalaSprite,
+	// 		x: 0,
+	// 		y: 0,
 	// 	},
 	// 	velocidad: {
 	// 		x: 0,
 	// 		y: 0,
 	// 	},
+	// 	rutaImagen: './assets/img/fondo.png',
 	// 	contadorLimiteCuadros: 1,
 	// 	maximosCuadros: 1,
-	// 	rutaImagen: './assets/img/boton-play.png',
-	// 	escalaSprite: propGenerales.botonPlay.escalaSprite,
-	// 	gravedad: 0
-	// })
+	// 	escalaSprite: propGenerales.fondo.escalaSprite,
+	// 	gravedad: 0,
+	// });
+
+	instanciarJugador();
+
+	instanciarNubes();
+
+	instanciarCesped();
+
+	instanciarSuelo();
+
+	instanciarCerca();
+
+	instanciarFlores();
+
+	instanciarEnemigo()
+
+	instanciarTablero();
 }
 
 async function cargarPuntuaciones() {
@@ -422,9 +394,6 @@ async function cargarPuntuaciones() {
 	}
 }
 
-
-
-
 function iniciar() {
 	propGenerales.tablero.detenerScore = false;
 	propGenerales.gameOver = false;
@@ -432,15 +401,57 @@ function iniciar() {
 	propGenerales.tablero.scoreAlmacenado = false;
 	instanciarObjetos();
 
+	let fps = 0;
+	let contadorFps = 0;
+	let dateStart = new Date();
+	let dateEnd = new Date();
+
+	let msInicial = new Date();
+	let msFinal = new Date();
+
 	animar();
 
+	function calcularFrames() {
+		msFinal = Date.now();
+
+		if (msFinal - msInicial >= 500 / 60) {
+			msInicial = Date.now();
+			return true;
+		}
+		return false;
+	}
+
+	function actualizarFps() {
+		dateEnd = new Date();
+
+		if (dateEnd - dateStart >= 1000) {
+			dateStart = new Date();
+			fps = contadorFps;
+			contadorFps = 0;
+		} else {
+			contadorFps += 1;
+		}
+
+		ctx.font = `700 40px 'VT323'`;
+		ctx.fillStyle = 'white';
+		ctx.fillText('Fps:' + fps, 10, 50);
+	}
+
 	function animar() {
+		// if (calcularFrames()) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		// fondo.actualizarSprite();
-		for (const index in nubesPequeñas) {
-			nubesPequeñas[index].actualizarSprite();
-			nubesGrandes[index].actualizarSprite();
+		
+
+		if (fondo) {
+			fondo.actualizarSprite();
+		}
+
+		if (nubesPequeñas) {
+			for (const index in nubesPequeñas) {
+				nubesPequeñas[index].actualizarSprite();
+				nubesGrandes[index].actualizarSprite();
+			}
 		}
 
 		// for (let index = 0; index <= (canvas.width / propGenerales.suelo.ancho) * propGenerales.suelo.escalaSprite; index++) {
@@ -450,23 +461,31 @@ function iniciar() {
 
 		// console.log({suelo: canvas.height - propGenerales.suelo.alto });
 
-		suelos.forEach((suelo) => {
-			suelo.actualizarSprite();
-			// console.log({suelo: suelo.posicion.y});
-		});
+		if (suelos) {
+			suelos.forEach((suelo) => {
+				suelo.actualizarSprite();
+				// console.log({suelo: suelo.posicion.y});
+			});
+		}
 
-		flores.forEach((flor) => {
-			// console.log({flor: flor.posicion.y});
-			flor.actualizarSprite();
-		});
+		if (flores) {
+			flores.forEach((flor) => {
+				// console.log({flor: flor.posicion.y});
+				flor.actualizarSprite();
+			});
+		}
 
 		// suelo.actualizarSprite();
-		cespeds.forEach((s) => {
-			// console.log({pasto: s.posicion.y});
-			s.actualizarSprite();
-		});
+		if (cespeds) {
+			cespeds.forEach((s) => {
+				// console.log({pasto: s.posicion.y});
+				s.actualizarSprite();
+			});
+		}
 
-		cercas.forEach((c) => c.actualizarSprite());
+		if (cercas) {
+			cercas.forEach((c) => c.actualizarSprite());
+		}
 
 		// cercas.forEach((cerca) => {
 		// cerca.actualizarSprite()
@@ -475,28 +494,40 @@ function iniciar() {
 		// });
 
 		if (propGenerales.gameStart) {
-			tableroScore.actualizarSprite();
+			if (tableroScore) {
+				tableroScore.actualizarSprite();
+			}
 			// goomba.actualizarSprite();
 			// koopa.actualizarSprite();
 
-			enemigos.forEach((enemigo) => {
-				enemigo.actualizarSprite();
-			})
+			if (enemigos) {
+				enemigos.forEach((enemigo) => {
+					enemigo.actualizarSprite();
+				});
+			}
 
-			mario.actualizarSprite();
-
+			if (mario) {
+				mario.actualizarSprite();
+			}
 		}
+
+		actualizarFps();
+		// }
 
 		// botonPlay.actualizarSprite()
 
 		// console.log(botonPlay);
 
-		if (detectarColision(mario, enemigos)) {
-			finalizarJuego();
+		if (mario && enemigos) {
+			if (detectarColision(mario, enemigos)) {
+				finalizarJuego();
+			}
 		}
 
 		if (!propGenerales.gameOver) {
+			
 			idAnimation = requestAnimationFrame(animar);
+			
 		}
 	}
 
@@ -547,11 +578,13 @@ function iniciar() {
 
 			containerDatosJugador.addEventListener('animationend', (e) => {
 				if (e.animationName === 'aparecer-container') {
+					botonPuntuaciones.style.display = "none";
+					
 					containerPuntuaciones.classList.remove('desaparecer-elementos');
 					containerPuntuaciones.style.display = 'flex';
 					containerPuntuaciones.classList.add('aparecer-elementos');
 
-					botonJugar.style.display = 'inline-block';
+					botonJugar.style.display = 'block';
 					botonJugar.classList.add('aparecer-elementos');
 					botonJugar.classList.remove('desaparecer-elementos');
 
@@ -597,7 +630,7 @@ function iniciar() {
 	function detectarColision(mario, enemigos) {
 		let colisionDetectada = false;
 
-		enemigos.forEach( enemigo => {
+		enemigos.forEach((enemigo) => {
 			if (mario.rectanguloColision.x + mario.rectanguloColision.ancho >= enemigo.rectanguloColision.x && mario.rectanguloColision.x <= enemigo.rectanguloColision.x + enemigo.rectanguloColision.ancho) {
 				if (enemigo.rectanguloColision.x > 0 && enemigo.rectanguloColision.x < canvas.width) {
 					if (mario.rectanguloColision.y + mario.rectanguloColision.alto >= enemigo.rectanguloColision.y) {
@@ -605,7 +638,7 @@ function iniciar() {
 					}
 				}
 			}
-		})
+		});
 
 		return colisionDetectada;
 	}
@@ -709,15 +742,101 @@ function iniciar() {
 				proporcion = (657 * 1.7) / window.innerHeight;
 			}
 		}
+
+	
+
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
-		definirPropGenerales();
+		actualizarPropGenerales();
 
-		instanciarObjetos();
+		actualizarObjectos();
+		// instanciarObjetos();
+
+		// var gameWidth = window.innerWidth;
+		// var gameHeight = window.innerHeight;
+		// var scaleToFitX = gameWidth / 1920;
+		// var scaleToFitY = gameHeight / 963;
+
+		// var currentScreenRatio = gameWidth / gameHeight;
+		// var optimalRatio = Math.min(scaleToFitX, scaleToFitY);
+
+		// if (currentScreenRatio >= 1.77 && currentScreenRatio <= 1.79) {
+		// 	canvas.style.width = gameWidth + "px";
+		// 	canvas.style.height = gameHeight + "px";
+		// }
+		// else {
+		// 	canvas.style.width = 1920 * optimalRatio + "px";
+		// 	canvas.style.height = 963 * optimalRatio + "px";
+		// }
 	}
 
-	function definirPropGenerales() {
+	function actualizarObjectos() {
+		instanciarJugador();
+		instanciarSuelo();
+		instanciarCerca();
+		instanciarCesped();
+		instanciarFlores();
+		instanciarNubes();
+		instanciarTablero();
+		instanciarEnemigo();
+
+		// mario.escalaSprite = propGenerales.mario.escalaSprite
+		// mario.posicion.x = mario.posicion.x * mario.escalaSprite
+		// mario.posicion.y = mario.posicion.y * mario.escalaSprite
+
+		// cespeds.forEach(cesped => {
+		// 	cesped.escalaSprite = propGenerales.cesped.escalaSprite
+		// 	cesped.posicion.x = cesped.posicion.x * propGenerales.cesped.escalaSprite
+		// 	cesped.posicion.y = cesped.posicion.y * propGenerales.cesped.escalaSprite
+		// })
+
+		// suelos.forEach(suelo => {
+		// 	suelo.escalaSprite = propGenerales.suelo.escalaSprite
+		// 	suelo.posicion.x = suelo.posicion.x * propGenerales.suelo.escalaSprite
+		// 	// suelo.posicion.y = suelo.posicion.y * propGenerales.suelo.escalaSprite
+		// })
+
+		// flores.forEach( flor => {
+		// 	flor.escalaSprite = propGenerales.flor.escalaSprite
+		// 	flor.posicion.x = flor.posicion.x * propGenerales.flor.escalaSprite
+		// 	flor.posicion.y = flor.posicion.y * propGenerales.flor.escalaSprite
+		// })
+
+		// cercas.forEach( cerca => {
+		// 	cerca.escalaSprite = propGenerales.cerca.escalaSprite
+		// 	cerca.posicion.x = cerca.posicion.x * propGenerales.cerca.escalaSprite
+		// 	cerca.posicion.y = cerca.posicion.y * propGenerales.cerca.escalaSprite
+		// })
+
+		// nubesGrandes.forEach( nube => {
+		// 	nube.escalaSprite = propGenerales.nubeGrande.escalaSprite
+		// 	nube.posicion.x = nube.posicion.x * propGenerales.nubeGrande.escalaSprite
+		// 	nube.posicion.y = nube.posicion.y * propGenerales.nubeGrande.escalaSprite
+		// })
+
+		// nubesPequeñas.forEach( nube => {
+		// 	nube.escalaSprite = propGenerales.nubePequeña.escalaSprite
+		// 	nube.posicion.x = nube.posicion.x * propGenerales.nubePequeña.escalaSprite
+		// 	nube.posicion.y = nube.posicion.y * propGenerales.nubePequeña.escalaSprite
+		// })
+
+		// enemigos.forEach( enemigo => {
+		// 	if(enemigo.nombreEnemigo === 'goomba') {
+		// 		enemigo.escalaSprite = propGenerales.goomba.escalaSprite
+		// 		enemigo.posicion.x = enemigo.posicion.x * propGenerales.goomba.escalaSprite
+		// 		enemigo.posicion.y = enemigo.posicion.y * propGenerales.goomba.escalaSprite
+		// 	}
+		// 	if(enemigo.nombreEnemigo === 'koopa') {
+		// 		enemigo.escalaSprite = propGenerales.koopa.escalaSprite
+		// 		enemigo.posicion.x = enemigo.posicion.x * propGenerales.koopa.escalaSprite
+		// 		enemigo.posicion.y = enemigo.posicion.y * propGenerales.koopa.escalaSprite
+		// 	}
+		// })
+	}
+
+	function actualizarPropGenerales() {
+		
 		propGenerales.mario.escalaSprite = (canvas.width * 0.3) / (window.innerWidth * proporcion);
 
 		propGenerales.cesped.escalaSprite = canvas.width / (window.innerWidth * proporcion);
@@ -769,6 +888,8 @@ function iniciar() {
 		propGenerales.tablero.escalaSprite = (canvas.width * 0.6) / (window.innerWidth * proporcion);
 
 		propGenerales.goomba.escalaSprite = (canvas.width * 0.7) / (window.innerWidth * proporcion);
+
+		propGenerales.koopa.escalaSprite = (canvas.width * 0.7) / (window.innerWidth * proporcion);
 	}
 
 	window.addEventListener('resize', resize);
